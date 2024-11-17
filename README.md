@@ -1,1 +1,1 @@
-# Embedded-Project-3
+# Smart Home Control System
