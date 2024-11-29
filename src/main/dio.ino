@@ -1,5 +1,5 @@
 #include "dio.h"
-
+#include "Register.h"
 void dio_init(void) {
   
     // lcd dio init
@@ -28,33 +28,35 @@ void dio_init(void) {
 
 }
 
-void Set_PIN_Direction(volatile uint8_t* ddr, uint8_t pin, uint8_t direction) {
+void Set_PIN_Direction(volatile unsigned char* ddr, unsigned char pin, uint8_t direction) {
+
     if (pin >= 8) return; // Invalid pin
     else if (direction == DIO_INPUT) {
-        *ddr &= ~(1 << pin); 
-    } 
+        Register_ResetBit(ddr,pin); 
+    }
     else if (direction == DIO_OUTPUT) {
-        *ddr |= (1 << pin);
+        Register_SetBit(ddr,pin);
     }
     else if (direction == DIO_INPUT_PULLUP) {
-        *ddr &= ~(1 << pin); 
-        PORTB |= (1 << pin);
+        Register_ResetBit(ddr,pin);  
+        PORTB |= (1 << pin); //I found this here ( don't know it's purpose)
     }
+
 }
 
-void Set_PIN_State(volatile uint8_t* port, uint8_t pin, uint8_t state) {
+void Set_PIN_State(volatile unsigned char* port, unsigned char pin, uint8_t state) {
 
     if (pin >= 8) return; // Invalid pin
     else if (state == HIGH) {
-        *port |= (1 << pin);
+        Register_SetBit(port,pin); 
     } 
     else if (state == LOW) {
-        *port &= ~(1 << pin);
+        Register_ResetBit(port,pin); 
     }
 
 }
 
-uint8_t Is_Button_Pressed(volatile uint8_t* pin_reg, uint8_t pin) {
+uint8_t Is_Button_Pressed(volatile unsigned char* pin_reg, unsigned char pin) {
 
     if (pin >= 8) return; // Invalid pin
     return !(*pin_reg & (1 << pin)); // Return 1 if the pin is LOW (button pressed), 0 if HIGH (button not pressed)
