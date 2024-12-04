@@ -21,7 +21,7 @@ void dio_init(void) {
 
     // PORTC dio init
     Set_PIN_Direction(&DDRC, LDR_PIN, DIO_INPUT);
-    Set_PIN_Direction(&DDRC, POT_PIN, DIO_INPUT);
+    Set_PIN_Direction(&DDRC, TMP_PIN, DIO_INPUT);
     Set_PIN_Direction(&DDRC, PC2, DIO_INPUT);
     Set_PIN_Direction(&DDRC, RED_LED_PIN, DIO_OUTPUT);
     Set_PIN_Direction(&DDRC, PC4, DIO_OUTPUT);

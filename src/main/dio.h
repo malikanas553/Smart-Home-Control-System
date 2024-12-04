@@ -73,7 +73,7 @@
 
 //Analog Sensors Pin
 #define LDR_PIN PC0
-#define POT_PIN PC1
+#define TMP_PIN PC1
 
 // Function Declarations
 void dio_init(void);
