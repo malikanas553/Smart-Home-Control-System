@@ -2,6 +2,8 @@
 #ifndef __adc__
 #define __adc__
 
+#include <stdint.h>
+
 #define ADCL   (*(volatile unsigned char*)0x78) 
 #define ADCH   (*(volatile unsigned char*)0x79)  
 #define ADC    (*(volatile unsigned short*)0x78) 

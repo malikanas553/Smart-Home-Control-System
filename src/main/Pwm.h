@@ -1,6 +1,8 @@
 #ifndef __Pwm__
 #define __Pwm__
 
+#include <stdint.h>
+
 // Timer 0
 #define OCR0A  (*(volatile unsigned char*)0x27)
 #define OCR0B  (*(volatile unsigned char*)0x28)
@@ -65,7 +67,7 @@ typedef enum {
     PWM_CHANNEL_1B   // Timer 1, OC1B
 } PWM_Channel;
 
-void PWM_Init(void);
-void PWM_SetDutyCycle(unsigned char duty);
+void PWM_Init(PWM_Channel channel);
+void PWM_SetDutyCycle(PWM_Channel channel, uint8_t duty);
 
 #endif

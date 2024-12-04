@@ -2,6 +2,7 @@
 #ifndef _uart_
 #define _uart_
 
+#include <stdint.h>
 #define BUFFER_SIZE 16
 
 #define UCSR0A  (*(volatile unsigned char*)0xC0)
