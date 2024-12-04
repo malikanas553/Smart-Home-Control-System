@@ -2,6 +2,8 @@
 #ifndef _dio_ 
 #define _dio_
 
+#include <stdint.h>
+
 #define PORTD  (*(volatile unsigned char*)0x2B)
 #define DDRD  (*(volatile unsigned char*)0x2A)
 #define PIND (*(volatile unsigned char*)0x29)

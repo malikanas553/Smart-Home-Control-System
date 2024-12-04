@@ -2,6 +2,8 @@
 #ifndef __Lcd__
 #define __Lcd__ 
 
+#include <stdint.h>
+
 unsigned char CCW_Arrow[] = {
   0b00000,
   0b01110,
