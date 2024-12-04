@@ -28,8 +28,6 @@
 #define ADEN  7
 
 void Adc_Init(void);
-
-uint16_t adc_reading;
 uint16_t Adc_ReadChannel(uint8_t ch);
-
+uint16_t Adc_Sampling(uint16_t adc_reading, unsigned char SAMPLE_N0);
 #endif
