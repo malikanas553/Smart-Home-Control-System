@@ -21,12 +21,12 @@ void DC_Start(unsigned char MotorID, tenuDirection Direction, unsigned char Spee
     {
       Set_PIN_State(&PORTD, MotorArray[MotorID][0], HIGH);
       Set_PIN_State(&PORTD, MotorArray[MotorID][1], LOW);
-      Pwm_SetDutyCycle(Speed,MotorArray[MotorID][2]);
+      PWM_SetDutyCycle(Speed,MotorArray[MotorID][2]);
 
     } else{
       Set_PIN_State(&PORTD, MotorArray[MotorID][0], LOW);
       Set_PIN_State(&PORTD, MotorArray[MotorID][1], HIGH);
-      Pwm_SetDutyCycle(Speed,MotorArray[MotorID][2]);
+      PWM_SetDutyCycle(Speed,MotorArray[MotorID][2]);
     }
 
 }
