@@ -2,8 +2,8 @@
 #define __EEPROM__ 
 
 /* function for clock */
-void EEP_Write(char address, char value);
+void EEP_Write(unsigned char address, char value);
 
-char EEP_Read(char address);
+unsigned char EEP_Read(unsigned char address);
 
 #endif /*#ifndef __EEPROM__*/
