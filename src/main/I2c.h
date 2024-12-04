@@ -3,10 +3,10 @@
 
 #include <stdint.h>
 
-#define TWBR ((volatile uint8_t*)0xB8)  // TWI Bit Rate Register
-#define TWSR ((volatile uint8_t*)0xB9)  // TWI Status Register
-#define TWDR ((volatile uint8_t*)0xBB)  // TWI Data Register
-#define TWCR ((volatile uint8_t*)0xBC)  // TWI Control Register
+#define TWBR (*(volatile uint8_t*)0xB8)  // TWI Bit Rate Register
+#define TWSR (*(volatile uint8_t*)0xB9)  // TWI Status Register
+#define TWDR (*(volatile uint8_t*)0xBB)  // TWI Data Register
+#define TWCR (*(volatile uint8_t*)0xBC)  // TWI Control Register
 
 #define TWINT 7  // TWI Interrupt Flag
 #define TWEA  6  // TWI Enable Acknowledge Bit
