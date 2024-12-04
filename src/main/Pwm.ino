@@ -2,7 +2,7 @@
 #include "dio.h"
 #include "register.h"
 
-void PWM_Init(PWM_Channel channel) {
+void PWM_Init(uint8_t channel) {
     switch (channel) {
         case PWM_CHANNEL_0A:
             Set_PIN_Direction(&DDRD, PD6, DIO_OUTPUT); // OC0A on PD6 (Pin 6)
@@ -66,7 +66,7 @@ void PWM_Init(PWM_Channel channel) {
 }
 
 
-void PWM_SetDutyCycle(PWM_Channel channel, uint8_t duty) {
+void PWM_SetDutyCycle(uint8_t channel, uint8_t duty) {
     switch (channel) {
         case PWM_CHANNEL_0A:
             OCR0A = duty;

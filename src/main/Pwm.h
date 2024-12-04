@@ -58,16 +58,14 @@
 #define CS21   1
 #define CS22   2
 
-typedef enum {
-    PWM_CHANNEL_0A,  // Timer 0, OC0A
-    PWM_CHANNEL_0B,  // Timer 0, OC0B
-    PWM_CHANNEL_2A,  // Timer 2, OC2A
-    PWM_CHANNEL_2B,  // Timer 2, OC2B
-    PWM_CHANNEL_1A,  // Timer 1, OC1A
-    PWM_CHANNEL_1B   // Timer 1, OC1B
-} PWM_Channel;
+#define PWM_CHANNEL_0A 0 // Timer 0, OC0A
+#define PWM_CHANNEL_0B 1 // Timer 0, OC0B
+#define PWM_CHANNEL_2A 2 // Timer 2, OC2A
+#define PWM_CHANNEL_2B 3 // Timer 2, OC2B
+#define PWM_CHANNEL_1A 4 // Timer 1, OC1A
+#define PWM_CHANNEL_1B 5 // Timer 1, OC1B
 
-void PWM_Init(PWM_Channel channel);
-void PWM_SetDutyCycle(PWM_Channel channel, uint8_t duty);
+void PWM_Init(uint8_t channel);
+void PWM_SetDutyCycle(uint8_t channel, uint8_t duty);
 
 #endif
