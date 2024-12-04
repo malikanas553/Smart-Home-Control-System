@@ -53,17 +53,22 @@ void LCD_String (char *str) {
 // LCD function for printing string on a specific position
 
 void LCD_String_xy (uint8_t row, uint8_t pos, char *str) {
-	if (row == 0 && pos<16)
-	  LCD_Send((pos & 0x0F) | SET_CURSOR_LINE1, MODE_COMMAND);
 
-	else if (row == 1 && pos<16)
-	  LCD_Send((pos & 0x0F) | SET_CURSOR_LINE2, MODE_COMMAND);
-    
+  LCD_MoveCursor_xy(row,pos);
+
 	LCD_String(str);	  
+
 }
 
 // LCD function for clearing the screen
+void LCD_MoveCursor_xy(uint8_t row, uint8_t pos){
+    if (row == 0 && pos<16)
+	    LCD_Send((pos & 0x0F) | SET_CURSOR_LINE1, MODE_COMMAND);
 
+	  else if (row == 1 && pos<16)
+	    LCD_Send((pos & 0x0F) | SET_CURSOR_LINE2, MODE_COMMAND);
+
+}
 void LCD_Clear() {
 	LCD_Send(CLEAR_DISPLAY, MODE_COMMAND);		
 	_delay_ms(2);

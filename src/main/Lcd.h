@@ -63,6 +63,7 @@ unsigned char CW_Arrow[] = {
 void LCD_Send (unsigned char char_data, uint8_t mode);
 void LCD_Init (void);
 void LCD_String (char *str);
+void LCD_MoveCursor_xy(uint8_t row, uint8_t pos);
 void LCD_String_xy (uint8_t row, uint8_t pos, char *str);
 void LCD_Custom_Char (unsigned char loc, unsigned char *pattern);
 void LCD_Clear();
