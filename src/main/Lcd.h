@@ -2,6 +2,28 @@
 #ifndef __Lcd__
 #define __Lcd__ 
 
+unsigned char CCW_Arrow[] = {
+  0b00000,
+  0b01110,
+  0b01100,
+  0b01010,
+  0b00001,
+  0b00001,
+  0b10001,
+  0b01110
+};
+
+unsigned char CW_Arrow[] = {
+  0b00000,
+  0b01110,
+  0b00110,
+  0b01010,
+  0b10000,
+  0b10000,
+  0b10001,
+  0b01110
+};
+
 // LCD Modes: Command Mode and Data Mode
 #define MODE_DATA 1
 #define MODE_COMMAND 0
@@ -42,5 +64,6 @@ void LCD_Send (unsigned char char_data, uint8_t mode);
 void LCD_Init (void);
 void LCD_String (char *str);
 void LCD_String_xy (uint8_t row, uint8_t pos, char *str);
+void LCD_Custom_Char (unsigned char loc, unsigned char *pattern);
 void LCD_Clear();
 #endif

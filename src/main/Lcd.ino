@@ -69,3 +69,14 @@ void LCD_Clear() {
 	_delay_ms(2);
 	LCD_Send(SET_CURSOR_LINE1, MODE_COMMAND);
 }
+
+void LCD_Custom_Char (unsigned char loc, unsigned char *pattern)
+{
+	unsigned char i;
+	if(loc<8)
+	{
+		LCD_Send(0x40 + (loc*8),MODE_COMMAND);	/* Command 0x40 and onwards forces the device to point CGRAM address */
+		for(i=0;i<8;i++)	/* Write 8 byte for generation of 1 character */
+		LCD_Send(pattern[i],MODE_DATA);
+	}
+}
