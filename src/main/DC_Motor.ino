@@ -10,7 +10,7 @@ void DC_Init(){
 
     Set_PIN_Direction(&DDRD, MotorArray[0][0], DIO_OUTPUT);
     Set_PIN_Direction(&DDRD, MotorArray[0][1], DIO_OUTPUT);
-    PWM_Init();
+    //PWM_Init();
 
 }
 
