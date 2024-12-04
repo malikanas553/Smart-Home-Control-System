@@ -1,5 +1,6 @@
 #include "dio.h"
 #include "Register.h"
+
 void dio_init(void) {
   
     // lcd dio init
@@ -28,7 +29,7 @@ void dio_init(void) {
 
 }
 
-void Set_PIN_Direction(volatile unsigned char* ddr, unsigned char pin, uint8_t direction) {
+void Set_PIN_Direction(volatile unsigned char* ddr, unsigned char pin, uint8_t direction, volatile unsigned char* port = &PORTB) {
 
     if (pin >= 8) return; // Invalid pin
     else if (direction == DIO_INPUT) {
@@ -38,8 +39,8 @@ void Set_PIN_Direction(volatile unsigned char* ddr, unsigned char pin, uint8_t d
         Register_SetBit(ddr,pin);
     }
     else if (direction == DIO_INPUT_PULLUP) {
-        Register_ResetBit(ddr,pin);  
-        PORTB |= (1 << pin); //I found this here ( don't know it's purpose)
+        Register_ResetBit(ddr,pin);
+        Register_SetBit(port, pin);  // Enable pull-up resistor; PORTB is default if not specified (see function parameters)
     }
 
 }
@@ -59,6 +60,6 @@ void Set_PIN_State(volatile unsigned char* port, unsigned char pin, uint8_t stat
 uint8_t Is_Button_Pressed(volatile unsigned char* pin_reg, unsigned char pin) {
 
     if (pin >= 8) return; // Invalid pin
-    return !(*pin_reg & (1 << pin)); // Return 1 if the pin is LOW (button pressed), 0 if HIGH (button not pressed)
+    return !(Register_GetBit(pin_reg, pin)); // Return 1 if the pin is LOW (button pressed), 0 if HIGH (button not pressed)
 
 }

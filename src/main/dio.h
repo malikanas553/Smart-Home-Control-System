@@ -77,7 +77,7 @@
 
 // Function Declarations
 void dio_init(void);
-void Set_PIN_Direction(volatile unsigned char* ddr, unsigned char pin, uint8_t direction);
+void Set_PIN_Direction(volatile unsigned char* ddr, unsigned char pin, uint8_t direction, volatile unsigned char* port = &PORTB);
 void Set_PIN_State(volatile unsigned char* port, unsigned char pin, uint8_t state);
 uint8_t Is_Button_Pressed(volatile unsigned char* pin_reg, unsigned char pin);
 

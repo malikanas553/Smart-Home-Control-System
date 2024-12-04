@@ -1,5 +1,6 @@
 #include <avr/interrupt.h>
 #include "uart.h"
+#include "register.h"
 
 void UART_SetBaudRate(uint32_t baud_rate) {
     uint16_t ubrr = F_CPU / ((baud_rate*16) - 1); // Baud rate formula
@@ -9,13 +10,18 @@ void UART_SetBaudRate(uint32_t baud_rate) {
 
 void UART_Init(uint32_t baud_rate) {
     UART_SetBaudRate(baud_rate);
-    UCSR0B |= (1 << RXEN0) | (1 << TXEN0); // Enable uart tx and rx
-    UCSR0C |= (1 << UCSZ01) | (1 << UCSZ00); // Set to 8-bit mode
-    UCSR0B |= (1 << RXCIE0); // Enable rx interrupt
+    // Enable UART TX and RX
+    Register_SetBit(&UCSR0B, RXEN0);
+    Register_SetBit(&UCSR0B, TXEN0);
+    // Set to 8-bit mode
+    Register_SetBit(&UCSR0C, UCSZ01);
+    Register_SetBit(&UCSR0C, UCSZ00);
+    // Enable RX interrupt
+    Register_SetBit(&UCSR0B, RXCIE0);
 }
 
 void UART_SendChar(unsigned char data) {
-    while (!(UCSR0A & ( 1 << UDRE0))); // Wait until Buffer is empty
+    while (!(Register_GetBit(&UCSR0A, UDRE0))); // Wait until Buffer is empty
     UDR0 = data; 
 }
 
@@ -27,13 +33,13 @@ void UART_SendString(char* string) {
 }
 
 char UART_Receive() {
-    while((UCSR0A & (1 << RXC0)) == 0); // Wait until data is received
+    while(!(Register_GetBit(&UCSR0A, RXC0))); // Wait until data is received
     return UDR0;
 }
 
 unsigned int UART_ReadInt(void) {
     unsigned int value = 0;
-    while ( ! (UCSR0A & ( 1 << RXC0)) );  //Int is 16 bits so value is shifted to store it
+    while (!(Register_GetBit(&UCSR0A, RXC0)));  //Int is 16 bits so value is shifted to store it
     value = UDR0; // Store in first 8 bits
     value <<= 8;
     value |= UDR0; // Store in 8 lower bits

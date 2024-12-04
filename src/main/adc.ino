@@ -1,10 +1,15 @@
 #include "adc.h"
+#include "register.h"
 
 void Adc_Init(void) {
-    // AREF = AVcc
-    ADMUX = (1<<REFS0);
+    // Set the REFS0 bit to select AVcc as reference
+    Register_SetBit(&ADMUX, REFS0);
+
     // ADC Enable and prescaler of 128, 16000000/128 = 125000
-    ADCSRA = (1<<ADEN)|(1<<ADPS2)|(1<<ADPS1)|(1<<ADPS0);
+    Register_SetBit(&ADCSRA, ADEN);  // Enable ADC
+    Register_SetBit(&ADCSRA, ADPS2); // Set ADC prescaler
+    Register_SetBit(&ADCSRA, ADPS1);
+    Register_SetBit(&ADCSRA, ADPS0);
 }
 
 uint16_t Adc_ReadChannel(uint8_t ch) {
@@ -12,9 +17,9 @@ uint16_t Adc_ReadChannel(uint8_t ch) {
     ADMUX = (ADMUX & 0b11111000)|ch; // clears the bottom 3 bits before ORing
  
     // start single convertion by writing ’1′ to ADSC
-     ADCSRA = ADCSRA | (1<<ADSC);
+    Register_SetBit(&ADCSRA, ADSC);
     
     // wait till conversion is complete and ADSC becomes 0
-    while (ADCSRA & (1<<ADSC));
-    return (ADC);
+    while (Register_GetBit(&ADCSRA, ADSC));
+    return ADC;
 }

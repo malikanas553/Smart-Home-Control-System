@@ -1,19 +1,27 @@
-#include  "Pwm.h"
+#include "Pwm.h"
+#include "dio.h"
+#include "register.h"
 
 void PWM_Init(){
+  Set_PIN_Direction(&DDRD, PD6, DIO_OUTPUT); //Set OC0A as output
+  
+  // Configure TCCR0A for Non-Inverting Fast PWM mode 3 using OCR A unit
+  Register_SetBit(&TCCR0A, COM0A1);
+  Register_SetBit(&TCCR0A, WGM01);
+  Register_SetBit(&TCCR0A, WGM00);
 
-  DDRD |= (1<<PD6);    //Fast PWM output at OC0A pin
-  TCCR0A |= (1<<COM0A1) | (1<<WGM01) | (1<<WGM00);	//Non-Inverting Fast PWM mode 3 using OCR A unit
-	TCCR0B |= (1<<CS00) | (1<<CS02);	//Prescalar over 1024
-
+  // Configure TCCR0B for a prescaler of 1024
+  Register_SetBit(&TCCR0B, CS00);
+  Register_SetBit(&TCCR0B, CS02);
 }
 
-void Pwm_SetDutyCycle(char duty,unsigned char pin){
-
-  if(pin == 3){
+void PWM_SetDutyCycle(char duty,unsigned char pin){
+  if (pin == 3) {
     OCR2B = duty;
-  }else if(pin == 6){
+  } else if (pin == 6) {
     OCR0A = duty;
+  } else {
+    //invalid pin
+    return;
   }
-  
 }

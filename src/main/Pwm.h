@@ -1,5 +1,5 @@
-#ifdef __PWM__
-#define __PWM__
+#ifndef __Pwm__
+#define __Pwm__
 
 #define OCR0A  (*(volatile unsigned char*)0x27)
 #define OCR0B  (*(volatile unsigned char*)0x28)
@@ -29,6 +29,6 @@
 #define FOC0A 7
 
 void PWM_Init(void);
-void Pwm_SetDutyCycle(unsigned char duty);
+void PWM_SetDutyCycle(unsigned char duty);
 
 #endif
