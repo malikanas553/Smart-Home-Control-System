@@ -51,14 +51,13 @@ void SaveSettings() {
 	// Save AC_TEMP (1 byte)
 	EEP_Write_Block(&AC_TEMP, (void *)TEMP_ADDRESS, sizeof(AC_TEMP));
 }
-
 void init() {
 
 	dio_init();
 	LCD_Init();
 	UART_Init(9600);
 	Adc_Init();
-	DC_Init();
+	//DC_Init();
 	LCD_Custom_Char(CW,CW_Arrow);
 	LCD_Custom_Char(CCW,CCW_Arrow);
 	LCD_Custom_Char(BACK,Back_Arrow);
