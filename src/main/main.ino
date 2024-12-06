@@ -115,6 +115,7 @@ int main(void) {
 
 
 
+   //While loop for Second Menu (AC/LDR)
 
 		while (key != 3) {
 
@@ -156,6 +157,7 @@ int main(void) {
 					LCD_Send(FAN_DIR,MODE_DATA);
 
 					switch (key) {
+
               case 4:
                 if (FAN_SPEED - 100 > 0) {
                   FAN_SPEED -= 100;
@@ -178,7 +180,6 @@ int main(void) {
                 }
                 _delay_ms(150);
                 break;
-
               case 6:
                 FAN_DIR = (FAN_DIR) ? CW : CCW;
                 UART_SendString("Fan Direction Toggled\n");
@@ -211,6 +212,7 @@ int main(void) {
 			} else if(key == 2){
 
 				AC_Set_Menu();
+        //While Loop for AC_SET MENU
 				while (key != 3){ // Wait for a key to get pressed
 
 					unsigned char temp[5];
