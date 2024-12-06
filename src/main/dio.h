@@ -59,8 +59,8 @@
 
 
 //LCD Pins
-#define EN PD2
-#define RS PD3
+#define EN PD3
+#define RS PD2
 
 //LED Pin
 #define RED_LED_PIN PC3
