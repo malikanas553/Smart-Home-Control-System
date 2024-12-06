@@ -70,6 +70,19 @@ int main(void) {
 	init();
 
 	while (1) {
+    
+    /* TEMPREATURE SENSOR LM35 CODE
+    uint16_t temp_adc_val;
+    float temp_val;
+    temp_adc_val = Adc_ReadChannel(TMP_PIN);	// Read Temperature
+    temp_val = (temp_adc_val * 4.88);	// Convert adc value to equivalent voltage
+    temp_val = (temp_val/10);	// LM35 gives output of 10mv/°C
+    UART_SendString("Temperature = ");
+    UART_SendInt(temp_val);
+    UART_SendString(" Degree Celsius\n");
+    _delay_ms(1000);
+    */
+
 		//System Initialization
 		LCD_Clear();
 		MAIN_Menu();
