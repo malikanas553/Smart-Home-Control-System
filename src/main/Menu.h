@@ -7,4 +7,5 @@
 
 void AC_Menu(void);
 void Speed_Menu(void);
+void MAIN_Menu(void);
 #endif
