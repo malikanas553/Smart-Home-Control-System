@@ -6,6 +6,7 @@
 #include "uart.h"
 #include "keypad.h"
 #include "DC_Motor.h"
+#include "Menu.h"
 #include <stdlib.h>
 
 
@@ -51,15 +52,6 @@ void SaveSettings() {
     EEP_Write_Block(&AC_TEMP, (void *)TEMP_ADDRESS, sizeof(AC_TEMP));
 }
 
-void AC_Menu(){
-    
-    LCD_String("TMP:");
-    LCD_String_xy(1, 0, "1:S/D 2:SET");
-    LCD_String_xy(1,13,"3:");
-    LCD_Send(BACK,MODE_DATA);
-
-}
-
 void init() {
 
   dio_init();
@@ -81,11 +73,7 @@ int main(void) {
   while (1) {
     //System Initialization
     LCD_Clear();
-    UART_SendString("System Started\n");
-    LCD_Send(DISPLAY_ON_CURSOR_OFF, MODE_COMMAND);
-    LCD_String("SMART HOME");
-    LCD_Send(SET_CURSOR_LINE2, MODE_COMMAND);
-    LCD_String("1:AC"); 
+    MAIN_Menu();
     
 
     while (key != 1 && key != 2) { // Wait for a key to get pressed
@@ -144,32 +132,28 @@ int main(void) {
       LCD_String_xy(0, 4, buffer);
  
        if (key == 1){
+
           DC_Start(0, FAN_DIR, FAN_SPEED);
           key = '\0';
           LCD_Clear();
-          LCD_String("SPEED:");
-          UART_SendString("AC Speed Option Chosen\n");
-          LCD_MoveCursor_xy(0,14);
-          LCD_Send(FAN_DIR,MODE_DATA);
-          LCD_String_xy(1,0,"4:- 5:+ 6:");
-          LCD_Send(CW,MODE_DATA);
-          LCD_String_xy(1,13,"3:");
-          LCD_Send(BACK,MODE_DATA);
+          SPEED_Menu();
 
           while (key != 3){ // Wait for a key to get pressed
-          
+            
             unsigned char speed[5];
             itoa(FAN_SPEED,speed,10);
             LCD_MoveCursor_xy(0,14);
             LCD_Send(FAN_DIR,MODE_DATA);
 
             if (key == 6){
+
                 FAN_DIR = (FAN_DIR) ? CW : CCW;
                 UART_SendString("Fan Direction Toggled\n");
                 _delay_ms(150);
                 new_setting = 1;
-            }else if(key == 5){
 
+            }else if(key == 5){
+                 
               if(FAN_SPEED+100 < 1100){
               FAN_SPEED += 100;
               DC_SetSpeed(0 , FAN_SPEED);
@@ -204,6 +188,7 @@ int main(void) {
             UART_SendString("Settings Saved");
             new_setting = 0;
           }
+
           key = '\0';
           _delay_ms(150);
           LCD_Clear();
@@ -247,11 +232,13 @@ int main(void) {
             _delay_ms(3);
             LCD_String_xy(0,5,"    ");
         }
+
            if(new_setting){
             SaveSettings();
             UART_SendString("Settings Saved");
             new_setting = 0;
           }
+
           key = '\0';
           _delay_ms(150);
           LCD_Clear();
@@ -269,7 +256,7 @@ int main(void) {
       key = keypad_get_key();
       _delay_ms(3);
       LCD_String_xy(0, 4,"    ");
-
+      
     
     }
 
