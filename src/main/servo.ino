@@ -1,13 +1,18 @@
 #include "servo.h"
+#include "Register.h"
+#include "dio.h"
 
 // Initialize the servo control
 void servo_init(void) {
     // Set PB1 (OC1A) as output
-    DDRB |= (1 << 1); 
+    Register_SetBit(&DDRB, 1);
 
     // Configure Timer1 for Fast PWM mode
-    TCCR1A |= (1 << WGM11) | (1 << COM1A1);  // Fast PWM, clear OC1A on compare match
-    TCCR1B |= (1 << WGM13) | (1 << WGM12) | (1 << CS11);  // Prescaler 8
+    Register_SetBit(&TCCR1A, WGM11);
+    Register_SetBit(&TCCR1A, COM1A1);
+    Register_SetBit(&TCCR1B, WGM13);
+    Register_SetBit(&TCCR1B, WGM12);
+    Register_SetBit(&TCCR1B, CS11);
 
     // Set the TOP value for a 20ms period
     ICR1 = TIMER_TOP;
