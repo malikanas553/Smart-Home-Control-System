@@ -58,7 +58,7 @@ void init() {
 	LCD_Init();
 	UART_Init(9600);
 	Adc_Init();
-	DC_Init();
+	//DC_Init();
 	LCD_Custom_Char(CW,CW_Arrow);
 	LCD_Custom_Char(CCW,CCW_Arrow);
 	LCD_Custom_Char(BACK,Back_Arrow);
@@ -83,8 +83,6 @@ int main(void) {
 		switch (key) {
 		case 1:
 			channel = TMP_PIN;
-			UART_SendString("AC Chosen\n");
-			LCD_Clear();
 			AC_Menu();
 			_delay_ms(150);
 			key = 0;
@@ -92,9 +90,9 @@ int main(void) {
 
 		case 2:
 			channel = LDR_PIN;
-			LCD_Clear();
-			LCD_String("LDR:");
-			UART_SendString("Light Dependent Resistor Chosen\n");
+			LDR_Menu();
+			_delay_ms(150);
+			key = 0;
 			break;
 
 		default:
@@ -136,7 +134,7 @@ int main(void) {
 				DC_Start(0, FAN_DIR, FAN_SPEED);
 				key = '\0';
 				LCD_Clear();
-				SPEED_Menu();
+				AC_Speed_Menu();
 
 				while (key != 3){ // Wait for a key to get pressed
 
@@ -200,12 +198,7 @@ int main(void) {
 
 			} else if(key == 2){
 
-				LCD_Clear();
-				LCD_String("TEMP:");
-				UART_SendString("AC Temp Option Chosen\n");
-				LCD_String_xy(1,0,"4:- 5:+");
-				LCD_String_xy(1,13,"3:");
-				LCD_Send(BACK,MODE_DATA);
+				AC_Set_Menu();
 				while (key != 3){ // Wait for a key to get pressed
 
 					unsigned char temp[5];
