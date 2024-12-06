@@ -3,7 +3,7 @@
 #include "dio.h"
 // Motor Array[Motor No][Pin]
 unsigned char MotorArray[][4] = {
-  {PC0, PC1, PB2, PWM_CHANNEL_1B}
+  {PC0, PC1, PB2, PWM_CHANNEL_0A_PD6}
 };
 
 void DC_Init(){

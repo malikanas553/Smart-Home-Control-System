@@ -46,6 +46,11 @@ unsigned int UART_ReadInt(void) {
     return value;
 }
 
+void UART_SendInt(uint8_t value) {
+    char buffer[10];  // Buffer to hold the integer as a string (supports up to 10 digits)
+    itoa(value, buffer, 10);  // Convert integer to string (base 10)
+    UART_SendString(buffer);  // Send the string representation of the integer
+}
 
 void UART_ReceiveString(char* buffer, uint16_t bufferSize) {
     uint16_t i = 0;
