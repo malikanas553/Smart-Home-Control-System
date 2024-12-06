@@ -6,6 +6,9 @@
 
 
 void AC_Menu(void);
-void Speed_Menu(void);
+void AC_Speed_Menu(void);
+void AC_Set_Menu(void);
 void MAIN_Menu(void);
+void LDR_Menu(void);
+void LDR_Set_Menu(void);
 #endif
