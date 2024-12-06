@@ -37,4 +37,5 @@ void UART_SendString(char* string);
 char UART_Receive();
 void UART_ReceiveString(char* buffer, uint16_t bufferSize);
 unsigned int UART_ReadInt(void);
+void UART_SendInt(uint8_t value);
 #endif
