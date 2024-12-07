@@ -1,0 +1,15 @@
+Part,Description,Datasheet,Supplier,Quantity,Price/Unit (EGP),Total Price (EGP)
+Arduino Uno ,Arduino Uno Atmega328p,https://shorturl.at/t9gHl,Future Electronics,1,495,495
+Jumper Wires,Male to Male + Breadboard wires,No Datasheet Available,Future Electronics,30,1.5,45
+Resistors,220 ohms,No Datasheet Available,Future Electronics,2,0.5,1
+USB 2.0 Type B Cable, Arduino USB Cable,No Datasheet Available,Future Electronics,1,45,45
+Breadboard 830 Tie Point,Wire Connections,https://shorturl.at/apDtE,RAM Electronics,2,40,80
+LCD 16x2 Screen,Mini Screen Display,https://shorturl.at/O1IhI,UGE Electronics,1,90,90
+LDR,Light Dependent Resistor,https://shorturl.at/AZEJ3,Future Electronics,1,20,20
+Potentiometer,Variable Resistor,No Datasheet Available,Future Electronics,2,10,20
+LED Diode 5 mm,Light Indicators,https://shorturl.at/TREZv,Future Electronics,1,1,1
+Keypad 4x4,Number Keypad,https://shorturl.at/D55c0,Micro Ohm,1,30,30
+DC Motor,Standard 130 Type,https://www.farnell.com/datasheets/1863913.pdf,Future Electronics,1,40,40
+L298 Module ,Dual H-Bridge motor driver,https://shorturl.at/YxKTa,RAM Electronics,1,85,85
+Micro SG90 Servo Motor,1.3kg Servo Motor,https://shorturl.at/2zbWD,Future Electronics,1,95,95
+,,,,,Total Budget ,1047
