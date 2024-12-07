@@ -71,6 +71,36 @@ void HandleFanSettings(unsigned int *fan_speed, unsigned char *fan_dir,char key,
     }
 }
 
+void HandleACTemperature(unsigned char *ac_temp,char key, unsigned char *new_setting) {
+    switch (key) {
+        case 5: // Increase AC Temperature
+            if (*ac_temp + 1 < 27) { // Check if within the maximum limit
+                (*ac_temp)++;
+                UART_SendString("AC Temp Increased\n");
+                *new_setting = 1;
+            } else {
+                UART_SendString("AC Temp is at Maximum\n");
+            }
+            _delay_ms(150);
+            break;
+
+        case 4: // Decrease AC Temperature
+            if (*ac_temp - 1 > 19) { // Check if within the minimum limit
+                (*ac_temp)--;
+                UART_SendString("AC Temp Decreased\n");
+                *new_setting = 1;
+            } else {
+                UART_SendString("AC Temp is at Minimum\n");
+            }
+            _delay_ms(150);
+            break;
+
+        default:
+            // Do nothing for unsupported keys
+            break;
+    }
+}
+
 void MAIN_Menu(void)
 {
     UART_SendString("System Started\n");

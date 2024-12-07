@@ -193,31 +193,13 @@ int main(void) {
                 unsigned char temp[5];
                 itoa(AC_TEMP,temp,10);
 
-                if(key == 5){
-                  if(AC_TEMP + 1 < 27){
-                    AC_TEMP += 1;
-                    UART_SendString("AC Temp Increased\n");
-                    new_setting = 1;
-                  }else{
-                    UART_SendString("AC Temp is at Maximum\n");
-                  }
-                  _delay_ms(150);
-                }else if(key == 4){
+                HandleACTemperature(&AC_TEMP, key, &new_setting);
 
-                  if(AC_TEMP - 1 > 19){
-                    AC_TEMP -= 1;
-                    UART_SendString("AC Temp Decreased\n");
-                    new_setting = 1;
-                  }else{
-                    UART_SendString("AC Temp is at Minimum\n");
-                  }
-                  _delay_ms(150);
-
-                }
                 LCD_String_xy(0,5,temp);
                 key = keypad_get_key();
                 _delay_ms(3);
                 LCD_String_xy(0,5,"    ");
+
               }
 
               if(new_setting){
