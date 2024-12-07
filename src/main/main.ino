@@ -17,6 +17,10 @@
 #define TEMP_ADDRESS 0
 #define SPEED_ADDRESS 2
 #define DIR_ADDRESS 4
+#define LDR_MIN 0       // Minimum LDR threshold
+#define LDR_MAX 1000    // Maximum LDR threshold
+
+unsigned int LDR_THRESHOLD = 500; // In
 
 unsigned char buffer[5];  // Increased buffer size for safety
 
@@ -71,17 +75,9 @@ int main(void) {
 
 	while (1) {
     
-    /* TEMPREATURE SENSOR LM35 CODE
-    uint16_t temp_adc_val;
-    float temp_val;
-    temp_adc_val = Adc_ReadChannel(TMP_PIN);	// Read Temperature
-    temp_val = (temp_adc_val * 4.88);	// Convert adc value to equivalent voltage
-    temp_val = (temp_val/10);	// LM35 gives output of 10mv/°C
-    UART_SendString("Temperature = ");
-    UART_SendInt(temp_val);
-    UART_SendString(" Degree Celsius\n");
+    //TEMPREATURE SENSOR LM35 CODE
     _delay_ms(1000);
-    */
+    
 
 		//System Initialization
 		LCD_Clear();
@@ -118,146 +114,184 @@ int main(void) {
    //While loop for Second Menu (AC/LDR)
 
 		while (key != 3) {
-
-			if(channel == TMP_PIN){ //Add Fan direction if AC chosen
+      uint16_t adc_reading;
+      adc_reading = Adc_ReadChannel(channel);	
+      
+			if(channel == TMP_PIN){
+         //Add Fan direction if AC chosen
 				LCD_MoveCursor_xy(0,14);
 				LCD_Send(FAN_DIR,MODE_DATA);
-			}
+       
+        float temp_val;
+        temp_val = (adc_reading * 4.88);	// Convert adc value to equivalent voltage
+        adc_reading = (temp_val/10);	// LM35 gives output of 10mv/°C
+        UART_SendString("Temperature = ");
+        UART_SendInt(temp_val);
+        UART_SendString(" Degree Celsius\n");
 
-			//Sampling for adc_reading
-			uint16_t adc_reading = Adc_ReadChannel(channel);
-			samples[sample_index] = adc_reading;
-			sample_index++;
-			if(sample_index > SAMPLE_N0 - 1) sample_index = 0;
-			unsigned short avg = 0;
-			for(uint8_t i = 1; i < SAMPLE_N0 ; i++){
-				avg += samples[i];
-			}
-			avg /= SAMPLE_N0;
-			adc_reading = avg;
+			}else if(channel == LDR_PIN){
+        
+        samples[sample_index] = adc_reading;
+        sample_index++;
+        if(sample_index > SAMPLE_N0 - 1) sample_index = 0;
+        unsigned short avg = 0;
+        for(uint8_t i = 1; i < SAMPLE_N0 ; i++){
+          avg += samples[i];
+        }
+        avg /= SAMPLE_N0;
+        adc_reading = avg;
 
+      }
 
 
 			// Display sensor reading
 			itoa(adc_reading, buffer, 10);
 			LCD_String_xy(0, 4, buffer);
+      
+      switch (channel){
+			 case TMP_PIN:
+            if (key == 1){
+                                              
+              DC_Start(0, FAN_DIR, FAN_SPEED);
+              key = '\0';
+              LCD_Clear();
+              AC_Speed_Menu();
 
-			if (key == 1){
+              while (key != 3){ // Wait for a key to get pressed
 
-				DC_Start(0, FAN_DIR, FAN_SPEED);
-				key = '\0';
-				LCD_Clear();
-				AC_Speed_Menu();
+                unsigned char speed[5];
+                itoa(FAN_SPEED,speed,10);
+                LCD_MoveCursor_xy(0,14);
+                LCD_Send(FAN_DIR,MODE_DATA);
 
-				while (key != 3){ // Wait for a key to get pressed
+                HandleFanSettings(&FAN_SPEED,&FAN_DIR,key,&new_setting);
 
-					unsigned char speed[5];
-					itoa(FAN_SPEED,speed,10);
-					LCD_MoveCursor_xy(0,14);
-					LCD_Send(FAN_DIR,MODE_DATA);
+                LCD_String_xy(0,6,speed);
+                key = keypad_get_key();
+                _delay_ms(3);
+                LCD_String_xy(0, 6,"    ");
 
-					switch (key) {
+              }
 
-              case 4:
-                if (FAN_SPEED - 100 > 0) {
-                  FAN_SPEED -= 100;
-                  DC_SetSpeed(0, FAN_SPEED);
-                  UART_SendString("Fan Speed Decreased\n");
-                  new_setting = 1;
-                } else {
-                  UART_SendString("Fan Speed is at Minimum\n");
+              if(new_setting){
+                SaveSettings();
+                UART_SendString("Settings Saved");
+                new_setting = 0;
+              }
+
+              key = '\0';
+              _delay_ms(150);
+              LCD_Clear();
+              AC_Menu();
+
+            } else if(key == 2){
+
+              AC_Set_Menu();
+              //While Loop for AC_SET MENU
+              while (key != 3){ // Wait for a key to get pressed
+
+                unsigned char temp[5];
+                itoa(AC_TEMP,temp,10);
+
+                if(key == 5){
+                  if(AC_TEMP + 1 < 27){
+                    AC_TEMP += 1;
+                    UART_SendString("AC Temp Increased\n");
+                    new_setting = 1;
+                  }else{
+                    UART_SendString("AC Temp is at Maximum\n");
+                  }
+                  _delay_ms(150);
+                }else if(key == 4){
+
+                  if(AC_TEMP - 1 > 19){
+                    AC_TEMP -= 1;
+                    UART_SendString("AC Temp Decreased\n");
+                    new_setting = 1;
+                  }else{
+                    UART_SendString("AC Temp is at Minimum\n");
+                  }
+                  _delay_ms(150);
+
                 }
-                _delay_ms(150);
-                break;
-              case 5:
-                if (FAN_SPEED + 100 < 1100) {
-                  FAN_SPEED += 100;
-                  DC_SetSpeed(0, FAN_SPEED);
-                  UART_SendString("Fan Speed Increased\n");
-                  new_setting = 1;
-                } else {
-                  UART_SendString("Fan Speed is at Maximum\n");
-                }
-                _delay_ms(150);
-                break;
-              case 6:
-                FAN_DIR = (FAN_DIR) ? CW : CCW;
-                UART_SendString("Fan Direction Toggled\n");
-                _delay_ms(150);
-                new_setting = 1;
-                break;
+                LCD_String_xy(0,5,temp);
+                key = keypad_get_key();
+                _delay_ms(3);
+                LCD_String_xy(0,5,"    ");
+              }
 
-              default:
-                break;
-					}
-
-					LCD_String_xy(0,6,speed);
-					key = keypad_get_key();
-					_delay_ms(3);
-					LCD_String_xy(0, 6,"    ");
-
-				}
-
-				if(new_setting){
-					SaveSettings();
-					UART_SendString("Settings Saved");
-					new_setting = 0;
-				}
-
-				key = '\0';
-				_delay_ms(150);
-				LCD_Clear();
-				AC_Menu();
-
-			} else if(key == 2){
-
-				AC_Set_Menu();
-        //While Loop for AC_SET MENU
-				while (key != 3){ // Wait for a key to get pressed
-
-					unsigned char temp[5];
-					itoa(AC_TEMP,temp,10);
-					if(key == 5){
-						if(AC_TEMP + 1 < 27){
-							AC_TEMP += 1;
-							UART_SendString("AC Temp Increased\n");
-							new_setting = 1;
-						}else{
-							UART_SendString("AC Temp is at Maximum\n");
-						}
-						_delay_ms(150);
-					}else if(key == 4){
-
-						if(AC_TEMP - 1 > 19){
-							AC_TEMP -= 1;
-							UART_SendString("AC Temp Decreased\n");
-							new_setting = 1;
-						}else{
-							UART_SendString("AC Temp is at Minimum\n");
-						}
-						_delay_ms(150);
-
-					}
-					LCD_String_xy(0,5,temp);
-					key = keypad_get_key();
-					_delay_ms(3);
-					LCD_String_xy(0,5,"    ");
-				}
-
-				if(new_setting){
-					SaveSettings();
-					UART_SendString("Settings Saved");
-					new_setting = 0;
-				}
-
-				key = '\0';
-				_delay_ms(150);
-				LCD_Clear();
-				AC_Menu();
+              if(new_setting){
+                SaveSettings();
+                UART_SendString("Settings Saved");
+                new_setting = 0;
+              }
+                 
+              key = '\0';
+              _delay_ms(150);
+              LCD_Clear();
+              AC_Menu();
 
 			} 
+      break;
+case LDR_PIN:
+    if (key == 1) {
+        key = '\0';
+        LCD_Clear();
+        LDR_Set_Menu(); // Display the LDR settings menu
 
+        while (key != 3) { // Wait for the user to press the "back" key
+            unsigned char ldr_value[5];
+            itoa(LDR_THRESHOLD, ldr_value, 10);
 
+            LCD_String_xy(0, 5, ldr_value); // Display the current threshold
+            key = keypad_get_key();
+            _delay_ms(3);
+            LCD_String_xy(0, 5, "    "); // Clear the previous threshold display
+
+            switch (key) {
+                case 4: // Decrease threshold
+                    if (LDR_THRESHOLD - 1 >= LDR_MIN) {
+                        LDR_THRESHOLD -= 1;
+                        UART_SendString("LDR Threshold Decreased\n");
+                        new_setting = 1;
+                    } else {
+                        UART_SendString("LDR Threshold at Minimum\n");
+                    }
+                    _delay_ms(150);
+                    break;
+                case 5: // Increase threshold
+                    if (LDR_THRESHOLD + 1 <= LDR_MAX) {
+                        LDR_THRESHOLD += 1;
+                        UART_SendString("LDR Threshold Increased\n");
+                        new_setting = 1;
+                    } else {
+                        UART_SendString("LDR Threshold at Maximum\n");
+                    }
+                    _delay_ms(150);
+                    break;
+                default:
+                    break;
+            }
+        }
+
+        if (new_setting) {
+            SaveSettings();
+            UART_SendString("Settings Saved\n");
+            new_setting = 0;
+        }
+
+        key = '\0';
+        _delay_ms(150);
+        UART_SendString("Back to LDR Menu\n");
+        LCD_Clear();
+        LDR_Menu();
+    }
+    break;
+
+      default:
+      break;
+
+		}
 
 			// Check adc_reading range and display status
 
