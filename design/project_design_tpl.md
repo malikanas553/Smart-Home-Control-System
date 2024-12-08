@@ -1,4 +1,4 @@
-# ADC LCD Interface Design
+# Smart Home Control System Design
 
 | **Author**              | `Seif Salama, Malik Babiker, Mostafa Hatem`                                       |
 |:------------------------|:-----------------------------------------------------|
