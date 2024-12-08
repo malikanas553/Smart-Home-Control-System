@@ -20,6 +20,12 @@
 #define DIR_ADDRESS 4
 #define LDR_MIN 0       // Minimum LDR threshold
 #define LDR_MAX 1000    // Maximum LDR threshold
+#define KnownThermistorResistorValue 100000 // Value of the known resistor (100kΩ)
+#define adcResolution 1023.0 // 10-bit ADC resolution
+#define vcc 5.0 // Supply voltage (5V)
+#define ThermistorBetaValue 3950.0 // Beta value of the thermistor
+#define ThermistorNominalResistance 100000.0 // Resistance at 25°C (100kΩ)
+#define ThermistorNominalTemperature 25.0 // Nominal temperature in Celsius (25°C)
 
 unsigned int LDR_THRESHOLD = 500; // In
 
@@ -33,6 +39,7 @@ unsigned int FAN_SPEED = 100;
 unsigned char FAN_DIR = CW;
 unsigned char AC_TEMP = 20;
 unsigned char new_setting = 0;
+float adc_reading = 0;
 
 
 void RestoreSettings() {
@@ -107,7 +114,6 @@ int main(void) {
 
 	//While loop for Second Menu (AC/LDR)
 		while (key != 3) {
-			uint16_t adc_reading;
 			adc_reading = Adc_ReadChannel(channel);	
 		
 			if(channel == TMP_PIN){
@@ -115,12 +121,21 @@ int main(void) {
 				LCD_MoveCursor_xy(0,14);
 				LCD_Send(FAN_DIR,MODE_DATA);
 		
-				float temp_val;
-				temp_val = (adc_reading * 4.88);	// Convert adc value to equivalent voltage
-				adc_reading = (temp_val/10);	// LM35 gives output of 10mv/°C
+				adc_reading = Adc_ReadChannel(TMP_PIN);
+
+				// Convert ADC value to voltage
+				adc_reading = adc_reading * (vcc / adcResolution);
+
+				// Calculate the thermistor's resistance
+				float thermistorResistance = (vcc / adc_reading - 1.0) * KnownThermistorResistorValue;
+
+				// Calculate temperature using the Beta formula
+				float temperatureKelvin = 1.0 / (1.0 / (ThermistorNominalTemperature + 273.15) + (1.0 / ThermistorBetaValue) * log(thermistorResistance / ThermistorNominalResistance));
+				float temperatureCelsius = temperatureKelvin - 273.15;
+				adc_reading = temperatureCelsius;
 				UART_SendString("Temperature = ");
-				UART_SendInt(temp_val);
-				UART_SendString(" Degree Celsius\n");
+				UART_SendInt(adc_reading);
+				UART_SendString("  °C\n");
 			}
 
 			else if(channel == LDR_PIN){
