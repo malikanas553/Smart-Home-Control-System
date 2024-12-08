@@ -4,26 +4,33 @@
 // LCD function for sending command or data
 
 void LCD_Send(unsigned char data, uint8_t mode) {
-    
-    LCD_Port = (LCD_Port & 0x0F) | (data & 0xF0); // sending upper nibble
+    // Sending upper nibble
+    Set_PIN_State(&PORTD, D4, (data & 0x10) >> 4);
+    Set_PIN_State(&PORTD, D5, (data & 0x20) >> 5);
+    Set_PIN_State(&PORTD, D6, (data & 0x40) >> 6);
+    Set_PIN_State(&PORTD, D7, (data & 0x80) >> 7);
+
     if (mode == MODE_DATA) {
         Set_PIN_State(&RS_EN_Port, RS, HIGH);
-    }
-    else if (mode == MODE_COMMAND) {
+    } else if (mode == MODE_COMMAND) {
         Set_PIN_State(&RS_EN_Port, RS, LOW);
     }
 
-	Set_PIN_State(&RS_EN_Port, EN, HIGH);
-	_delay_us(1);
-	Set_PIN_State(&RS_EN_Port, EN, LOW);
+    Set_PIN_State(&RS_EN_Port, EN, HIGH);
+    _delay_us(1);
+    Set_PIN_State(&RS_EN_Port, EN, LOW);
+    _delay_us(200);
 
-	_delay_us(200);
+    // Sending lower nibble
+    Set_PIN_State(&PORTD, D4, (data & 0x01));
+    Set_PIN_State(&PORTD, D5, (data & 0x02) >> 1);
+    Set_PIN_State(&PORTD, D6, (data & 0x04) >> 2);
+    Set_PIN_State(&PORTD, D7, (data & 0x08) >> 3);
 
-	LCD_Port = (LCD_Port & 0x0F) | (data << 4); // sending lower nibble
-	Set_PIN_State(&RS_EN_Port, EN, HIGH);
-	_delay_us(1);
-	Set_PIN_State(&RS_EN_Port, EN, LOW);
-	_delay_ms(2);
+    Set_PIN_State(&RS_EN_Port, EN, HIGH);
+    _delay_us(1);
+    Set_PIN_State(&RS_EN_Port, EN, LOW);
+    _delay_ms(2);
 }
 
 
@@ -61,11 +68,11 @@ void LCD_String_xy (uint8_t row, uint8_t pos, char *str) {
 }
 
 // LCD function for clearing the screen
-void LCD_MoveCursor_xy(uint8_t row, uint8_t pos){
+void LCD_MoveCursor_xy(uint8_t row, uint8_t pos) {
     if (row == 0 && pos<16)
 	    LCD_Send((pos & 0x0F) | SET_CURSOR_LINE1, MODE_COMMAND);
 
-	  else if (row == 1 && pos<16)
+	else if (row == 1 && pos<16)
 	    LCD_Send((pos & 0x0F) | SET_CURSOR_LINE2, MODE_COMMAND);
 
 }
@@ -75,11 +82,9 @@ void LCD_Clear() {
 	LCD_Send(SET_CURSOR_LINE1, MODE_COMMAND);
 }
 
-void LCD_Custom_Char (unsigned char loc, unsigned char *pattern)
-{
+void LCD_Custom_Char (unsigned char loc, unsigned char *pattern) {
 	unsigned char i;
-	if(loc<8)
-	{
+	if(loc<8) {
 		LCD_Send(0x40 + (loc*8),MODE_COMMAND);	/* Command 0x40 and onwards forces the device to point CGRAM address */
 		for(i=0;i<8;i++)	/* Write 8 byte for generation of 1 character */
 		LCD_Send(pattern[i],MODE_DATA);

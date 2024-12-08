@@ -61,6 +61,10 @@
 //LCD Pins
 #define EN PC2
 #define RS PC3
+#define D4 PD4
+#define D5 PD2
+#define D6 PD6
+#define D7 PD7
 
 //LED Pin
 #define YELLOW_LED_PIN PD3
