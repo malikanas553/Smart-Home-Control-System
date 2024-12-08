@@ -11,5 +11,5 @@
 
 void PWM_Init(uint8_t channel);
 void PWM_SetDutyCycle(uint8_t channel, uint8_t duty);
-
+void PWM_Disable(uint8_t channel);
 #endif
