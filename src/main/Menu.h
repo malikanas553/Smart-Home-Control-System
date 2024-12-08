@@ -12,6 +12,4 @@ void AC_Set_Menu(void);
 void MAIN_Menu(void);
 void LDR_Menu(void);
 void LDR_Set_Menu(void);
-void HandleFanSettings(unsigned int *fan_speed, unsigned char *fan_dir, char key, unsigned char *new_setting);
-void HandleACTemperature(unsigned char *ac_temp, char key, unsigned char *new_setting);
 #endif
