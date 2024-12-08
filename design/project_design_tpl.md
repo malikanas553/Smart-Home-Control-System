@@ -160,6 +160,8 @@ Smart Lighting System (LDR Sensor and LED):
 ### Include Structure
 
 The following diagram shows dependencies upon files in the module.
+
+```plantuml
 @startuml
 package "Smart_Home_Control_System" {
     [adc.ino] --> [adc.h]
@@ -182,7 +184,6 @@ package "Smart_Home_Control_System" {
     [dio.ino] --> [register.h]
 }
 @enduml
-
 ```
 
 ### Configuration
