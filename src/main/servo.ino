@@ -26,3 +26,14 @@ void servo_set_angle(uint8_t angle) {
     // Convert the pulse width to timer ticks
     OCR1A = (16 * pulse_width) / PRESCALER;
 }
+
+void servo_swing(void) {
+    for (uint8_t i = 0; i <= 180; i++) {
+        servo_set_angle(i);
+        _delay_ms(10);
+    }
+    for (uint8_t i = 180; i > 0; i--) {
+        servo_set_angle(i);
+        _delay_ms(10);
+    }
+}
