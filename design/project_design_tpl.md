@@ -45,8 +45,7 @@ The module priority is classified as P2, indicating that it is a necessary part 
 
 This section describes where this module resides in the context of the embedded system's software architecture
 ```plantuml
-
-@startuml
+@@startuml
 node "APP" {   
 }
 
@@ -83,65 +82,50 @@ node "Register" {
 node "DC_Motor" {
 }
 
+node "Servo" {
+}
+
+node "Settings" {
+}
+
+node "Sensors" {
+}
+
+node "LED" {
+}
+
 APP --> UART
 APP <-- Keypad
 APP --> LCD
 APP <-- ADC
 APP <--> EEPROM
+APP <-- Sensors
+APP <--> Settings
+APP <-- Menu
+APP <-->LED
+LED -->DIO
+LED -->PWM
 EEPROM <--> Microcontroller
 UART --> Microcontroller
 ADC --> Microcontroller
 DIO <--> Microcontroller
+Register --> Microcontroller
 LCD --> DIO
-LCD --> Menu
+Menu --> LCD
 Keypad --> DIO
 PWM <-- Microcontroller
 DC_Motor --> PWM
 APP <--> DC_Motor
-Menu --> Microcontroller
-Register --> DIO
-
+DIO --> Register
+Servo --> PWM
+APP <--> Servo
+Settings --> EEPROM
+Settings --> UART
+Sensors --> ADC
+Sensors --> DIO
+Sensors --> UART
 @enduml
 
-
-```
-
-### Assumptions & Constraints
-
-1. This system assumes stable input from sensors, using averaging to reduce noise.
-2. The LCD display has limited character space, requiring concise data representation.
-3. The module operates within the 8-bit MCU memory constraints and processing capacity.
-4. The system assumes that all connected components (sensors, motor, etc.) are properly calibrated and function within the expected range.
-5. The system assumes that the user interacts with the system through a keypad and LCD, and no additional input devices are required.
-
-```plantuml
-
-@startuml
-(*) --> Init
-Init --> ConfigureADC_UART_LCD
-ConfigureADC_UART_LCD --> AwaitKeyInput
-AwaitKeyInput --> SetChannel
-SetChannel --> If "Key = 1" then
-    If --> DisplayTempValue
-    DisplayTempValue --> AwaitKeyInput
-    AwaitKeyInput --> If "Key = 1" then
-        If --> ControlFanSpeedDirection
-        ControlFanSpeedDirection --> AwaitKeyInput
-    else
-        If --> ControlTemperature
-        ControlTemperature --> AwaitKeyInput
-    endif
-else if "Key = 2" then
-    If --> DisplayLDRValue
-    DisplayLDRValue --> AwaitKeyInput
-    AwaitKeyInput --> If "Key = 1" then
-        If --> ControlLEDIntensity
-        ControlLEDIntensity --> AwaitKeyInput
-    endif
-else
-    If --> AwaitKeyInput
-endif
-@enduml
 ```
 
 ## Functional Description
@@ -177,8 +161,8 @@ Smart Lighting System (LDR Sensor and LED):
 | uart.h        | Header file for UART functions       |
 | adc.ino       | Source code for ADC functions        |
 | adc.h         | Header file for ADC functions        |
-| Lcd.ino       | Source code for LCD functions        |
-| Lcd.h         | Header file for LCD functions        |
+| lcd.ino       | Source code for LCD functions        |
+| lcd.h         | Header file for LCD functions        |
 | keypad.ino    | Source code for Keypad functions     |
 | keypad.h      | Header file for Keypad functions     |
 | pwm.ino       | Source code for PWM functions        |
@@ -191,6 +175,14 @@ Smart Lighting System (LDR Sensor and LED):
 | eeprom.h      | Header file for EEPROM functions     |
 | servo.ino     | Source code for Servo Motor functions|
 | servo.h       | Header file for Servo Motor functions|
+| settings.ino  | Source code for settings management  |
+| settings.h    | Header file for settings management  |
+| sensors.ino   | Source code for sensor data handling |
+| sensors.h     | Header file for sensor data handling |
+| register.h    | Header file for register definitions |
+| led.ino       | Source code for LED functions        |
+| led.h         | Header file for LED functions        |
+
 
 ```
 
