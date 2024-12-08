@@ -1,6 +1,6 @@
 # Smart Home Control System Design
 
-| **Author**              | `Seif Salama, Malik Babiker, Mostafa Hatem`                                       |
+| **Author**              | `Seif Salama, Malik Babiker, Mostafa Hatem`          |
 |:------------------------|:-----------------------------------------------------|
 | **Status**              | `Draft/Inspection/Approved`                          |
 | **Version**             | `1.0`                                                |
@@ -19,24 +19,26 @@ The scope of this document includes:
 - Design and implementation of the Smart Home system.
 - Integration of analog sensors, Temperature sensor and LDR, and display of their values on an LCD screen.
 - User-configurable settings via keypad input.
-- Alert mechanism to notify the user when sensor readings exceed the defined limits.
 
 This document serves as the reference for both coding and module testing, ensuring that the system works within the defined constraints and meets the project requirements.
 
 The module priority is classified as P2, indicating that it is a necessary part of the system but not critical for initial deployment.
 
 ### Defnitions and Acronym
-| **Abbreviation** |             **Meaning**             |
-|:----------------:|:-----------------------------------:|
-| ADC              | Analog-to-Digital Converter              |
-| UART             | Universal Asynchronous Receiver Transmitter |
-| LCD              | Liquid Crystal Display                  |
-| POT              | Potentiometer                            |
-| LDR              | Light Dependent Resistor                |
-| DIO              | Digital Input Output                |
-| LED              | Light Emitting Diode                |
-| DC               | Direct Current                      |
-| PWM              | Pulse Width Modulation              |
+| **Abbreviation** | **Meaning**                                |  
+|:----------------:|:------------------------------------------:|  
+| ADC              | Analog-to-Digital Converter                |  
+| UART             | Universal Asynchronous Receiver Transmitter|  
+| LCD              | Liquid Crystal Display                     |  
+| POT              | Potentiometer                              |  
+| LDR              | Light Dependent Resistor                   |  
+| DIO              | Digital Input Output                       |  
+| LED              | Light Emitting Diode                       |  
+| DC               | Direct Current                             |  
+| PWM              | Pulse Width Modulation                     |  
+| AC               | Air Conditioning                           |  
+| APP              | Application                                |
+
 
 
 ## Architectural Overview
