@@ -9,6 +9,7 @@
 #include "Menu.h"
 #include "Eeprom.h"
 #include "sensors.h"
+#include "Led.h"
 #include <stdlib.h>
 
 #define CW 0
@@ -17,10 +18,11 @@
 #define TEMP_ADDRESS 0
 #define SPEED_ADDRESS 2
 #define DIR_ADDRESS 4
-#define LDR_MIN 0       // Minimum LDR threshold
-#define LDR_MAX 1000    // Maximum LDR threshold
+#define LDR_ADDRESS 6
+#define LDR_MIN 10       // Minimum LDR threshold
+#define LDR_MAX 250    // Maximum LDR threshold
 
-unsigned int LDR_THRESHOLD = 500; // In
+unsigned int LDR_THRESHOLD = 100; // In
 
 unsigned char buffer[5];  // Increased buffer size for safety
 
@@ -42,6 +44,9 @@ void RestoreSettings() {
 
 	// Read AC_TEMP (1 byte)
 	eeprom_read_block(&AC_TEMP, (const void*)TEMP_ADDRESS, sizeof(AC_TEMP));
+
+  eeprom_read_block(&LDR_THRESHOLD, (const void*)LDR_ADDRESS, sizeof(LDR_THRESHOLD));
+
 }
 
 void SaveSettings() {
@@ -53,6 +58,9 @@ void SaveSettings() {
 
 	// Save AC_TEMP (1 byte)
 	EEP_Write_Block(&AC_TEMP, (void *)TEMP_ADDRESS, sizeof(AC_TEMP));
+ 
+  // Sace LDR THRESHOLD
+  EEP_Write_Block(&LDR_THRESHOLD, (const void*)LDR_ADDRESS, sizeof(LDR_THRESHOLD));
 }
 void init() {
 
@@ -118,16 +126,25 @@ int main(void) {
         }else{
           DC_Stop(0);
         }
-
+        itoa(adc_reading, buffer, 10);
+			  LCD_String_xy(0, 4, buffer);
 			}
 
 			else if(channel == LDR_PIN){
 				adc_reading = Sensors_GetLightLevel(channel);
+
+        if(adc_reading < 20){
+          LED_ON(1023);
+        }else{
+          LED_OFF();
+        }
+        itoa(adc_reading, buffer, 10);
+			  LCD_String_xy(0, 11, buffer);
+
 			}
 
 			// Display sensor reading
-			itoa(adc_reading, buffer, 10);
-			LCD_String_xy(0, 4, buffer);
+			
 		
 			switch (channel){
 				case TMP_PIN:
@@ -145,8 +162,8 @@ int main(void) {
 							LCD_Send(FAN_DIR,MODE_DATA);
 
 							HandleFanSettings(&FAN_SPEED,&FAN_DIR,key,&new_setting);
-                            DC_SetSpeed(0,FAN_SPEED);
-                            DC_SetDirection(0,FAN_DIR);
+              DC_SetSpeed(0,FAN_SPEED);
+              DC_SetDirection(0,FAN_DIR);
 							LCD_String_xy(0,6,speed);
 							key = keypad_get_key();
 							_delay_ms(100);
@@ -208,15 +225,15 @@ int main(void) {
 						unsigned char ldr_value[5];
 						itoa(LDR_THRESHOLD, ldr_value, 10);
 
-						LCD_String_xy(0, 5, ldr_value); // Display the current threshold
+						LCD_String_xy(0, 6, ldr_value); // Display the current threshold
 						key = keypad_get_key();
 						_delay_ms(3);
-						LCD_String_xy(0, 5, "    "); // Clear the previous threshold display
+						LCD_String_xy(0, 6, "    "); // Clear the previous threshold display
 
 						switch (key) {
 							case 4: // Decrease threshold
-								if (LDR_THRESHOLD - 1 >= LDR_MIN) {
-									LDR_THRESHOLD -= 1;
+								if (LDR_THRESHOLD - 10 >= 10) {
+									LDR_THRESHOLD -= 10;
 									UART_SendString("LDR Threshold Decreased\n");
 									new_setting = 1;
 								} 
@@ -227,8 +244,8 @@ int main(void) {
 								break;
 
 							case 5: // Increase threshold
-								if (LDR_THRESHOLD + 1 <= LDR_MAX) {
-									LDR_THRESHOLD += 1;
+								if (LDR_THRESHOLD + 10 <= 255) {
+									LDR_THRESHOLD += 10;
 									UART_SendString("LDR Threshold Increased\n");
 									new_setting = 1;
 								} else {
@@ -239,6 +256,9 @@ int main(void) {
 							default:
 								break;
 						}
+
+             LED_ON(LDR_THRESHOLD);
+
 					}
 
 					if (new_setting) {
@@ -267,13 +287,17 @@ int main(void) {
 
 			key = keypad_get_key();
 			_delay_ms(3);
-			LCD_String_xy(0, 4,"    ");
-
+      if(channel == TMP_PIN){
+			  LCD_String_xy(0, 4,"    ");
+      }else{
+        LCD_String_xy(0, 11,"    ");
+      }
 
 		}
 
 		key = '\0';  // Reset key for the next iteration
-        DC_Stop(0);
+    DC_Stop(0);
+    LED_OFF();
 
 	}
 
