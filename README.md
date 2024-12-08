@@ -43,10 +43,5 @@ Test Cases are developed in Robot Framework Test steps:
 **Optimized BOM**
 [Optimized_BOM](./bom/optimized_bom.csv)
 
-## 5. Video Demonstration
-
-[Demo_Video](./video/sample_video.mp4)
-
-
-## 6. Design
+## 5. Design
 [Design_Report](./design/project_design_tpl.md)
