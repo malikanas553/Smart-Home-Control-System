@@ -1,5 +1,5 @@
 Part,Description,Datasheet,Supplier,Quantity,Price/Unit (EGP),Total Price (EGP)
-AVR Controller,ATmega328P,https://www.atmel.com/images/doc8161.pdf1, UGE Electronics, 1, 325,325
+AVR Controller,ATmega328P,https://www.atmel.com/images/doc8161.pdf1, UGE Electronics,1,325,325
 Jumper Wires,Male to Male + Breadboard wires,No Datasheet Available,Future Electronics,30,1.5,45
 Resistors,220 ohms,No Datasheet Available,Future Electronics,2,0.5,1
 USB 2.0 Type B Cable, Arduino USB Cable,No Datasheet Available,Future Electronics,1,45,45
@@ -8,9 +8,10 @@ LCD 16x2 Screen,Mini Screen Display,https://shorturl.at/O1IhI,UGE Electronics,1,
 LDR,Light Dependent Resistor,https://shorturl.at/AZEJ3,Future Electronics,1,20,20
 Potentiometer,Variable Resistor,No Datasheet Available,Future Electronics,2,10,20
 LED Diode 5 mm,Light Indicators,https://shorturl.at/TREZv,Future Electronics,1,1,1
-Crystal Oscillator,	16MHz,No datasheet available, Amazon, 1, 45, 45
-Voltage Regulator,LM317T, https://www.ti.com/lit/ds/symlink/lm317-n.pdf?ts=1731508289063&ref_url=https%253A%252F%252Fwww.mouser.se%252F, UGE Electronics, 1, 10, 10
-22pF Capacitors, Used with crystal oscillator, No datasheet, UGE Electronics, 4, 0.5, 2
-FTDI Adaptor, communication with Atmega328P, https://ftdichip.com/wp-content/uploads/2020/07/AN_107_AdvancedDriverOptions_AN_000073.pdf, Future Electronics, 1, 140, 140
+Crystal Oscillator,"	16MHz",No datasheet available, Amazon,1,45,45
+Voltage Regulator,LM317T, https://www.ti.com/lit/ds/symlink/lm317-n.pdf?ts=1731508289063&ref_url=https%253A%252F%252Fwww.mouser.se%252F, UGE Electronics,1,10,10
+22pF Capacitors, Used with crystal oscillator, No datasheet, UGE Electronics,4,0.5,2
+FTDI Adaptor, communication with Atmega328P, https://ftdichip.com/wp-content/uploads/2020/07/AN_107_AdvancedDriverOptions_AN_000073.pdf, Future Electronics,1,140,140
 Keypad 4x4,Number Keypad,https://shorturl.at/D55c0,Micro Ohm,1,30,30
-,,,,,Total Budget,827
+24C16 DIP8 16Kbit EEPROM, External EEPROM,https://shorturl.at/5YzwS,UGE Electronics,1,7,7
+,,,,,Total Budget,861
