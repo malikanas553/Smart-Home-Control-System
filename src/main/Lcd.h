@@ -27,14 +27,14 @@ unsigned char CW_Arrow[] = {
 };
 
 unsigned char Back_Arrow[] = {
-  B00000,
-  B00000,
-  B00100,
-  B01000,
-  B11111,
-  B01000,
-  B00100,
-  B00000
+  0b00000,
+  0b00000,
+  0b00100,
+  0b01000,
+  0b11111,
+  0b01000,
+  0b00100,
+  0b00000
 };
 
 // LCD Modes: Command Mode and Data Mode

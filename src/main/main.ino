@@ -26,7 +26,6 @@ uint16_t adc_reading = 0;
 
 void init()
 {
-
 	dio_init();
 	LCD_Init();
 	UART_Init(9600);

@@ -1,5 +1,7 @@
 #include "Lcd.h"
 #include "uart.h"
+#include "Settings.h"
+#include "Menu.h"
 // LCD function for sending command or data
 void AC_Menu(void)
 {
@@ -31,74 +33,6 @@ void AC_Set_Menu(void)
     LCD_String_xy(1,0,"4:- 5:+");
     LCD_String_xy(1,13,"3:");
     LCD_Send(BACK,MODE_DATA);
-}
-void HandleFanSettings(unsigned int *fan_speed, unsigned char *fan_dir,char key, unsigned char *new_setting) {
-    switch (key) {
-        case 4: // Decrease Fan Speed
-            if (*fan_speed - 100 > 0) {
-                *fan_speed -= 100;
-                DC_SetSpeed(0, *fan_speed); // Set the new fan speed
-                UART_SendString("Fan Speed Decreased\n");
-                *new_setting = 1;
-            } else {
-                UART_SendString("Fan Speed is at Minimum\n");
-            }
-            _delay_ms(150);
-            break;
-
-        case 5: // Increase Fan Speed
-            if (*fan_speed + 100 < 1100) {
-                *fan_speed += 100;
-                DC_SetSpeed(0, *fan_speed); // Set the new fan speed
-                UART_SendString("Fan Speed Increased\n");
-                *new_setting = 1;
-            } else {
-                UART_SendString("Fan Speed is at Maximum\n");
-            }
-            _delay_ms(150);
-            break;
-
-        case 6: // Toggle Fan Direction
-            *fan_dir = (*fan_dir) ? CW : CCW;
-            UART_SendString("Fan Direction Toggled\n");
-            _delay_ms(150);
-            *new_setting = 1;
-            break;
-
-        default:
-            // Do nothing for unsupported keys
-            break;
-    }
-}
-
-void HandleACTemperature(unsigned char *ac_temp,char key, unsigned char *new_setting) {
-    switch (key) {
-        case 5: // Increase AC Temperature
-            if (*ac_temp + 1 < 27) { // Check if within the maximum limit
-                (*ac_temp)++;
-                UART_SendString("AC Temp Increased\n");
-                *new_setting = 1;
-            } else {
-                UART_SendString("AC Temp is at Maximum\n");
-            }
-            _delay_ms(150);
-            break;
-
-        case 4: // Decrease AC Temperature
-            if (*ac_temp - 1 > 19) { // Check if within the minimum limit
-                (*ac_temp)--;
-                UART_SendString("AC Temp Decreased\n");
-                *new_setting = 1;
-            } else {
-                UART_SendString("AC Temp is at Minimum\n");
-            }
-            _delay_ms(150);
-            break;
-
-        default:
-            // Do nothing for unsupported keys
-            break;
-    }
 }
 
 void MAIN_Menu(void)
