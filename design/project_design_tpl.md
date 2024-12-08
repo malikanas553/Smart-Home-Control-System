@@ -110,63 +110,86 @@ endif
 The ADC LCD Interface reads analog values from sensors connected to specified ADC channels. Data is sampled (for noise reduction) and displayed on an LCD. Threshold limits for sensor readings can be adjusted using a keypad, and UART communication sends real-time data to an external monitor.
 
 ## Implementation of the Module
-This chapter discusses the detailed design of the module.
+This chapter discusses the detailed design of the Smart Home Control System, which consists of two main parts.
 
-- ADC Initialization: Initializes ADC for specified channels.
-- LCD Display Functions: Displays sensor type, reading, and threshold limits.
-- UART Communication: Transmits real-time sensor data over UART.
-- Keypad Input Handling: Adjusts LLM/HHM thresholds.
+Temperature Control System (Fan Simulation):
+
+- Temperature Sensor: This part of the system uses an ADC to read the temperature values from a sensor. The temperature is then displayed on the LCD. The fan speed 
+  and direction can be controlled based on the temperature readings.
+- Fan Speed and Direction Control: The fan simulates an air conditioning system. The fan's speed and direction (clockwise or counterclockwise) are adjusted based on 
+  the temperature sensor's reading. The user can set threshold limits (Low Limit and High Limit) via the keypad, and these values determine when the fan will operate at different speeds or directions.
+
+Smart Lighting System (LDR Sensor and LED):
+
+- LDR (Light Dependent Resistor) Sensor: This sensor is used to monitor the surrounding light intensity. The LDR sensor is connected to the ADC, and its readings 
+  are displayed on the LCD.
+- LED Control: The LED simulates the smart lighting system, and its brightness is adjusted based on the light intensity measured by the LDR. The LED's brightness can 
+  be controlled to match desired lighting levels based on the sensor's readings.
 
 ## Integration and Configuration
 ### Static Files
 
-| File name     | Contents                            |
-|---------------|-------------------------------------|
-| main.ino      | Source code for main application    |
-| dio.ino       | Source code for DIO functions       |
-| dio.h         | Header file for DIO functions       |
-| uart.ino      | Source code for UART functions      |
-| uart.h        | Header file for UART functions      |
-| adc.ino       | Source code for ADC functions       |
-| adc.h         | Header file for ADC functions       |
-| Lcd.ino       | Source code for LCD functions       |
-| Lcd.h         | Header file for LCD functions       |
-| keypad.ino    | Source code for Keypad functions    |
-| keypad.h      | Header file for Keypad functions    |
-| pwm.ino       | Source code for PWM functions       |
-| pwm.h         | Header file for PWM functions       |
-| menu.ino      | Source code for menu display        |
-| menu.h        | Header file for menu display        |
-| dc_motor.ino  | Source code for DC Motor functions  |
-| dc_motor.h    | Header file for DC Motor functions  |
-| eeprom.ino    | Source code for EEPROM functions    |
-| eeprom.h      | Header file for EEPROM functions    |
+```
+| File name     | Contents                             |
+|---------------|--------------------------------------|
+| main.ino      | Source code for main application     |
+| dio.ino       | Source code for DIO functions        |
+| dio.h         | Header file for DIO functions        |
+| uart.ino      | Source code for UART functions       |
+| uart.h        | Header file for UART functions       |
+| adc.ino       | Source code for ADC functions        |
+| adc.h         | Header file for ADC functions        |
+| Lcd.ino       | Source code for LCD functions        |
+| Lcd.h         | Header file for LCD functions        |
+| keypad.ino    | Source code for Keypad functions     |
+| keypad.h      | Header file for Keypad functions     |
+| pwm.ino       | Source code for PWM functions        |
+| pwm.h         | Header file for PWM functions        |
+| menu.ino      | Source code for menu display         |
+| menu.h        | Header file for menu display         |
+| dc_motor.ino  | Source code for DC Motor functions   |
+| dc_motor.h    | Header file for DC Motor functions   |
+| eeprom.ino    | Source code for EEPROM functions     |
+| eeprom.h      | Header file for EEPROM functions     |
+| servo.ino     | Source code for Servo Motor functions|
+| servo.h       | Header file for Servo Motor functions|
+
+```
 
 
 ### Include Structure
 
 The following diagram shows dependencies upon files in the module.
-
-```plantuml
 @startuml
-package "ADC_LCD_Module" {
-    [adc.c] --> [adc.h]
-    [lcd.c] --> [lcd.h]
-    [uart.c] --> [uart.h]
-    [keypad.c] --> [keypad.h]
-    [main.c] --> [adc.h]
-    [main.c] --> [lcd.h]
-    [main.c] --> [uart.h]
-    [main.c] --> [keypad.h]
+package "Smart_Home_Control_System" {
+    [adc.ino] --> [adc.h]
+    [lcd.ino] --> [lcd.h]
+    [uart.ino] --> [uart.h]
+    [keypad.ino] --> [keypad.h]
+    [keypad.ino] --> [dio.h]
+    [pwm.ino] --> [pwm.h]
+    [dc_motor.ino] --> [dc_motor.h]
+    [dc_motor.ino] --> [dio.h]
+    [dc_motor.ino] --> [pwm.h]
+    [menu.ino] --> [lcd.h]
+    [menu.ino] --> [uart.h]
+    [main.ino] --> [adc.h]
+    [main.ino] --> [lcd.h]
+    [main.ino] --> [uart.h]
+    [main.ino] --> [keypad.h]
+    [main.ino] --> [dc_motor.h]
+    [main.ino] --> [menu.h]
+    [dio.ino] --> [register.h]
 }
 @enduml
+
 ```
 
 ### Configuration
 Any required hardware/software or system configuration that can be adjusted a header file shall be detailed in this section. This can be placed in the table below.
-| Name | Value range | Description |
-|------|-------------|-------------|
-| LLM           | 0 - 1023        | Lower threshold limit for sensor readings     |
-| HHM           | 0 - 1023        | Upper threshold limit for sensor readings     |
-| UART_BaudRate | 9600            | Baud rate for UART communication              |
-| SAMPLE_N0     | 20              | Number of samples for averaging sensor data   |
+| Name      | Value Range  | Description                                    |
+|-----------|--------------|------------------------------------------------|
+| SPEED     | 0 - 1023     | Speed control value for the fan                |
+| Direction | 0 - 1        | Direction control for the fan (0: CW, 1: CCW)  |
+| TEMP      | 0 - 1023     | Temperature sensor reading range               |
+| SAMPLES   | 20           | Number of samples for averaging sensor data    |
