@@ -4,8 +4,8 @@
 void dio_init(void) {
   
     // lcd dio init
-    Set_PIN_Direction(&DDRD, EN, DIO_OUTPUT);
-    Set_PIN_Direction(&DDRD, RS, DIO_OUTPUT);
+    Set_PIN_Direction(&DDRD, PD3, DIO_OUTPUT);
+    Set_PIN_Direction(&DDRD, PD3, DIO_OUTPUT);
     Set_PIN_Direction(&DDRD, PD4, DIO_OUTPUT);
     Set_PIN_Direction(&DDRD, PD5, DIO_OUTPUT);
     Set_PIN_Direction(&DDRD, PD6, DIO_OUTPUT);
@@ -22,8 +22,8 @@ void dio_init(void) {
     // PORTC dio init
     Set_PIN_Direction(&DDRC, LDR_PIN, DIO_INPUT);
     Set_PIN_Direction(&DDRC, TMP_PIN, DIO_INPUT);
-    //Set_PIN_Direction(&DDRC, PC2, DIO_INPUT);
-    //Set_PIN_Direction(&DDRC, RED_LED_PIN, DIO_OUTPUT);
+    Set_PIN_Direction(&DDRC, EN, DIO_OUTPUT);
+    Set_PIN_Direction(&DDRC, RS, DIO_OUTPUT);
     //Set_PIN_Direction(&DDRC, PC4, DIO_OUTPUT);
     //Set_PIN_Direction(&DDRC, PC5, DIO_OUTPUT);
 
