@@ -8,10 +8,9 @@
 #include "DC_Motor.h"
 #include "Menu.h"
 #include "Eeprom.h"
+#include "sensors.h"
 #include <stdlib.h>
 
-
-#define SAMPLE_N0 50
 #define CW 0
 #define CCW 1
 #define BACK 2
@@ -20,12 +19,6 @@
 #define DIR_ADDRESS 4
 #define LDR_MIN 0       // Minimum LDR threshold
 #define LDR_MAX 1000    // Maximum LDR threshold
-#define KnownThermistorResistorValue 100000 // Value of the known resistor (100kΩ)
-#define adcResolution 1023.0 // 10-bit ADC resolution
-#define vcc 5.0 // Supply voltage (5V)
-#define ThermistorBetaValue 3950.0 // Beta value of the thermistor
-#define ThermistorNominalResistance 100000.0 // Resistance at 25°C (100kΩ)
-#define ThermistorNominalTemperature 25.0 // Nominal temperature in Celsius (25°C)
 
 unsigned int LDR_THRESHOLD = 500; // In
 
@@ -33,13 +26,11 @@ unsigned char buffer[5];  // Increased buffer size for safety
 
 uint8_t channel; // Variable for choosing a channel
 
-unsigned char samples[SAMPLE_N0]; // Array to store LDR values
-uint8_t sample_index = 0; // Index of Samples Array
 unsigned int FAN_SPEED = 100;
 unsigned char FAN_DIR = CW;
 unsigned char AC_TEMP = 20;
 unsigned char new_setting = 0;
-float adc_reading = 0;
+uint16_t adc_reading = 0;
 
 
 void RestoreSettings() {
@@ -120,38 +111,12 @@ int main(void) {
 			//Add Fan direction if AC chosen
 				LCD_MoveCursor_xy(0,14);
 				LCD_Send(FAN_DIR,MODE_DATA);
-		
-				adc_reading = Adc_ReadChannel(TMP_PIN);
-
-				// Convert ADC value to voltage
-				adc_reading = adc_reading * (vcc / adcResolution);
-
-				// Calculate the thermistor's resistance
-				float thermistorResistance = (vcc / adc_reading - 1.0) * KnownThermistorResistorValue;
-
-				// Calculate temperature using the Beta formula
-				float temperatureKelvin = 1.0 / (1.0 / (ThermistorNominalTemperature + 273.15) + (1.0 / ThermistorBetaValue) * log(thermistorResistance / ThermistorNominalResistance));
-				float temperatureCelsius = temperatureKelvin - 273.15;
-				adc_reading = temperatureCelsius;
-				UART_SendString("Temperature = ");
-				UART_SendInt(adc_reading);
-				UART_SendString("  °C\n");
+				adc_reading = Sensors_GetTemperature(channel);
 			}
 
 			else if(channel == LDR_PIN){
-			
-			samples[sample_index] = adc_reading;
-			sample_index++;
-			if(sample_index > SAMPLE_N0 - 1) sample_index = 0;
-			unsigned short avg = 0;
-			for(uint8_t i = 1; i < SAMPLE_N0 ; i++){
-			avg += samples[i];
+				adc_reading = Sensors_GetLightLevel(channel);
 			}
-			avg /= SAMPLE_N0;
-			adc_reading = avg;
-
-			}
-
 
 			// Display sensor reading
 			itoa(adc_reading, buffer, 10);

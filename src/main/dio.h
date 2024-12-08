@@ -54,13 +54,13 @@
 // LCD Pins Port
 #define LCD_Dir  DDRD
 #define LCD_Port PORTD
-#define RS_EN_Dir  DDRD
-#define RS_EN_Port PORTD
+#define RS_EN_Dir  DDRC
+#define RS_EN_Port PORTC
 
 
 //LCD Pins
-#define EN PD3
-#define RS PD2
+#define EN PC2
+#define RS PC3
 
 //LED Pin
 
