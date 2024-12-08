@@ -4,7 +4,7 @@
 
 char keypad_get_key(void) {
     // Iterate over each row
-    for (int row = 0; row < 3; row++) {
+    for (int row = 0; row < 2; row++) {
         // Set all rows high initially
         Set_PIN_State(&PORTB, ROW1_PIN, HIGH);
         Set_PIN_State(&PORTB, ROW2_PIN, HIGH);
