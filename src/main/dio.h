@@ -67,8 +67,7 @@
 // Keypad Pins (PORTB)
 #define ROW1_PIN PB0
 #define ROW2_PIN PB1
-#define ROW3_PIN PB2
-#define COL1_PIN PB3
+#define COL1_PIN PB2
 #define COL2_PIN PB4
 #define COL3_PIN PB5
 
