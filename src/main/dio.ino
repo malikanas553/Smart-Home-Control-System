@@ -25,8 +25,6 @@ void dio_init(void) {
     Set_PIN_Direction(&DDRC, TMP_PIN, DIO_INPUT);
     Set_PIN_Direction(&DDRC, EN, DIO_OUTPUT);
     Set_PIN_Direction(&DDRC, RS, DIO_OUTPUT);
-    //Set_PIN_Direction(&DDRC, PC4, DIO_OUTPUT);
-    //Set_PIN_Direction(&DDRC, PC5, DIO_OUTPUT);
 
 }
 

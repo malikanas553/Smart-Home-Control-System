@@ -60,7 +60,7 @@ void init() {
 	LCD_Init();
 	UART_Init(9600);
 	Adc_Init();
-	//DC_Init();
+	DC_Init();
 	LCD_Custom_Char(CW,CW_Arrow);
 	LCD_Custom_Char(CCW,CCW_Arrow);
 	LCD_Custom_Char(BACK,Back_Arrow);
@@ -112,6 +112,13 @@ int main(void) {
 				LCD_MoveCursor_xy(0,14);
 				LCD_Send(FAN_DIR,MODE_DATA);
 				adc_reading = Sensors_GetTemperature(channel);
+         
+        if(adc_reading > AC_TEMP){
+          DC_Start(0,CW,FAN_SPEED);
+        }else{
+          DC_Stop(0);
+        }
+
 			}
 
 			else if(channel == LDR_PIN){
@@ -126,7 +133,6 @@ int main(void) {
 				case TMP_PIN:
 					if (key == 1){
 												
-						DC_Start(0, FAN_DIR, FAN_SPEED);
 						key = '\0';
 						LCD_Clear();
 						AC_Speed_Menu();
@@ -139,10 +145,11 @@ int main(void) {
 							LCD_Send(FAN_DIR,MODE_DATA);
 
 							HandleFanSettings(&FAN_SPEED,&FAN_DIR,key,&new_setting);
-
+                            DC_SetSpeed(0,FAN_SPEED);
+                            DC_SetDirection(0,FAN_DIR);
 							LCD_String_xy(0,6,speed);
 							key = keypad_get_key();
-							_delay_ms(3);
+							_delay_ms(100);
 							LCD_String_xy(0, 6,"    ");
 
 						}
@@ -266,6 +273,7 @@ int main(void) {
 		}
 
 		key = '\0';  // Reset key for the next iteration
+        DC_Stop(0);
 
 	}
 
