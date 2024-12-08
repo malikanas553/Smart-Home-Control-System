@@ -63,6 +63,7 @@
 #define RS PC3
 
 //LED Pin
+#define YELLOW_LED_PIN PD3
 
 // Keypad Pins (PORTB)
 #define ROW1_PIN PB0
