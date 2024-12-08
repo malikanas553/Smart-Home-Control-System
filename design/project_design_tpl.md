@@ -205,15 +205,23 @@ package "Smart_Home_Control_System" {
     [dc_motor.ino] --> [pwm.h]
     [menu.ino] --> [lcd.h]
     [menu.ino] --> [uart.h]
-    [main.ino] --> [adc.h]
     [main.ino] --> [lcd.h]
     [main.ino] --> [uart.h]
     [main.ino] --> [keypad.h]
     [main.ino] --> [dc_motor.h]
     [main.ino] --> [menu.h]
     [dio.ino] --> [register.h]
+    [servo.ino] --> [pwm.h]
+    [sensors.ino] --> [sensors.h]
+    [settings.ino] --> [settings.h]
+    [main.ino] --> [keypad.h]
+    [main.ino] --> [dc_motor.h]
+    [main.ino] --> [menu.h]
+    [main.ino] --> [settings.h]
+    [main.ino] --> [sensors.h]
 }
 @enduml
+
 ```
 
 ### Configuration
