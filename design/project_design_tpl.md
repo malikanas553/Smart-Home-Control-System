@@ -112,6 +112,8 @@ Register --> DIO
 4. The system assumes that all connected components (sensors, motor, etc.) are properly calibrated and function within the expected range.
 5. The system assumes that the user interacts with the system through a keypad and LCD, and no additional input devices are required.
 
+```plantuml
+
 @startuml
 (*) --> Init
 Init --> ConfigureADC_UART_LCD
@@ -138,7 +140,7 @@ else
     If --> AwaitKeyInput
 endif
 @enduml
-
+```
 
 ## Functional Description
 The Smart Home Control System integrates temperature control with fan simulation and smart lighting with LED control. It reads temperature and light intensity data from sensors, displays values on an LCD, and adjusts fan speed and direction based on the desired temperature set by the user. LED brightness is controlled by light intensity. The user can set the desired temperature via a keypad, and real-time data is transmitted via UART for external monitoring, providing a responsive smart home experience.
