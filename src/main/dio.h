@@ -54,21 +54,21 @@
 // LCD Pins Port
 #define LCD_Dir  DDRD
 #define LCD_Port PORTD
-#define RS_EN_Dir  DDRD
-#define RS_EN_Port PORTD
+#define RS_EN_Dir  DDRC
+#define RS_EN_Port PORTC
 
 
 //LCD Pins
-#define EN PD3
-#define RS PD2
+#define EN PC2
+#define RS PC3
 
 //LED Pin
 
 // Keypad Pins (PORTB)
 #define ROW1_PIN PB0
 #define ROW2_PIN PB1
-#define ROW3_PIN PB2
-#define COL1_PIN PB3
+#define ROW3_PIN -1
+#define COL1_PIN PB2
 #define COL2_PIN PB4
 #define COL3_PIN PB5
 
