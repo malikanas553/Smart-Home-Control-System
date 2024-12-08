@@ -224,24 +224,24 @@ Test Case 12: Verify EEPROM Write and Read Operations for Fan Speed
       Confirm Serial Monitor outputs: **"Fan speed restored from EEPROM"**.  
 
 Test Case 13 : Based on the readings, system automatically controls fan and LED
-[Documentation] To verify that the system automatically controls the fan and LED based on sensor readings and predefined thresholds.
-[Setup steps]  
+    [Documentation] To verify that the system automatically controls the fan and LED 
+    [Setup steps]  
 
-Power on the system.
-Ensure that the system is in the default state (fan off, LED off).
-Set the temperature and light intensity thresholds to appropriate values.
+    Power on the system.
+    Ensure that the system is in the default state (fan off, LED off).
+    Set the temperature and light intensity thresholds to appropriate values.
 
-[Action steps]
-Simulate a temperature reading that exceeds the temperature threshold.
-Observe the system's response.
+    [Action steps]
+    Simulate a temperature reading that exceeds the temperature threshold.
+    Observe the system's response.
 
-Simulate a light intensity reading that falls below the light intensity threshold.
-Observe the system's response.
+    Simulate a light intensity reading that falls below the light intensity threshold.
+    Observe the system's response.
 
-[Assertion steps]
-Temperature Sensor Simulation:
-The fan should turn on and operate at the appropriate speed.
-The LED should remain off.
-Light Sensor Simulation:
-The fan should remain off.
-The LED should turn on.
+    [Assertion steps]
+    Temperature Sensor Simulation:
+    The fan should turn on and operate at the appropriate speed.
+    The LED should remain off.
+    Light Sensor Simulation:
+    The fan should remain off.
+    The LED should turn on.
