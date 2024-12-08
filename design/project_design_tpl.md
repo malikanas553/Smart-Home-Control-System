@@ -43,43 +43,65 @@ The module priority is classified as P2, indicating that it is a necessary part 
 
 This section describes where this module resides in the context of the embedded system's software architecture
 ```plantuml
+
 @startuml
 node "APP" {   
 }
+
 node "UART" { 
 }
-node "Keypad"{
+
+node "Keypad" {
 }
-node "LCD"{
+
+node "LCD" {
 }
-node "DIO"{
+
+node "DIO" {
 }
-node "ADC"{
+
+node "ADC" {
 }
-node "Mircocontroller"{
+
+node "Microcontroller" {
 }
-node "DIO"{
+
+node "PWM" {
 }
-node "PWM"{
+
+node "Menu" {
 }
-node "Menu"{
+
+node "EEPROM" {
 }
-node "EEPROM"{
+
+node "Register" {
 }
-node "Register"{
+
+node "DC_Motor" {
 }
-node 
+
 APP --> UART
 APP <-- Keypad
 APP --> LCD
-UART --> Mircocontroller
 APP <-- ADC
-ADC <-- Mircocontroller
-DIO <--> Mircocontroller
+APP <--> EEPROM
+EEPROM <--> Microcontroller
+UART --> Microcontroller
+ADC --> Microcontroller
+DIO <--> Microcontroller
 LCD --> DIO
-Keypad --> DIO
+LCD --> Menu
+Keypad --> DIO
+PWM <-- Microcontroller
+DC_Motor --> PWM
+APP <--> DC_Motor
+Menu --> Microcontroller
+Register --> DIO
 
 @enduml
+
+
 ```
 
 ### Assumptions & Constraints
@@ -87,27 +109,39 @@ Keypad --> DIO
 1. This system assumes stable input from sensors, using averaging to reduce noise.
 2. The LCD display has limited character space, requiring concise data representation.
 3. The module operates within the 8-bit MCU memory constraints and processing capacity.
+4. The system assumes that all connected components (sensors, motor, etc.) are properly calibrated and function within the expected range.
+5. The system assumes that the user interacts with the system through a keypad and LCD, and no additional input devices are required.
 
-```plantuml
 @startuml
 (*) --> Init
 Init --> ConfigureADC_UART_LCD
 ConfigureADC_UART_LCD --> AwaitKeyInput
 AwaitKeyInput --> SetChannel
 SetChannel --> If "Key = 1" then
-    If --> DisplayPotValue
-
+    If --> DisplayTempValue
+    DisplayTempValue --> AwaitKeyInput
+    AwaitKeyInput --> If "Key = 1" then
+        If --> ControlFanSpeedDirection
+        ControlFanSpeedDirection --> AwaitKeyInput
+    else
+        If --> ControlTemperature
+        ControlTemperature --> AwaitKeyInput
+    endif
 else if "Key = 2" then
     If --> DisplayLDRValue
-
+    DisplayLDRValue --> AwaitKeyInput
+    AwaitKeyInput --> If "Key = 1" then
+        If --> ControlLEDIntensity
+        ControlLEDIntensity --> AwaitKeyInput
+    endif
 else
     If --> AwaitKeyInput
 endif
 @enduml
-```
+
 
 ## Functional Description
-The ADC LCD Interface reads analog values from sensors connected to specified ADC channels. Data is sampled (for noise reduction) and displayed on an LCD. Threshold limits for sensor readings can be adjusted using a keypad, and UART communication sends real-time data to an external monitor.
+The Smart Home Control System integrates temperature control with fan simulation and smart lighting with LED control. It reads temperature and light intensity data from sensors, displays values on an LCD, and adjusts fan speed and direction based on the desired temperature set by the user. LED brightness is controlled by light intensity. The user can set the desired temperature via a keypad, and real-time data is transmitted via UART for external monitoring, providing a responsive smart home experience.
 
 ## Implementation of the Module
 This chapter discusses the detailed design of the Smart Home Control System, which consists of two main parts.
@@ -117,7 +151,7 @@ Temperature Control System (Fan Simulation):
 - Temperature Sensor: This part of the system uses an ADC to read the temperature values from a sensor. The temperature is then displayed on the LCD. The fan speed 
   and direction can be controlled based on the temperature readings.
 - Fan Speed and Direction Control: The fan simulates an air conditioning system. The fan's speed and direction (clockwise or counterclockwise) are adjusted based on 
-  the temperature sensor's reading. The user can set threshold limits (Low Limit and High Limit) via the keypad, and these values determine when the fan will operate at different speeds or directions.
+  the temperature sensor's reading. The user can set the temperature via the keypad, and this value determine when the fan will start and stop operating.
 
 Smart Lighting System (LDR Sensor and LED):
 
