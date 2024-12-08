@@ -14,6 +14,8 @@ void RestoreSettings(void)
   EEP_Read_Block(&AC_TEMP, (const void *)TEMP_ADDRESS, sizeof(AC_TEMP));
 
   EEP_Read_Block(&LDR_THRESHOLD, (const void *)LDR_ADDRESS, sizeof(LDR_THRESHOLD));
+
+  EEP_Read_Block(&FAN_SWING, (const void *)LDR_ADDRESS, sizeof(FAN_SWING));
 }
 
 void HandleACTemperature(unsigned char *ac_temp,char key, unsigned char *new_setting) {
@@ -46,11 +48,18 @@ void HandleACTemperature(unsigned char *ac_temp,char key, unsigned char *new_set
     }
 }
 
-void HandleFanSettings(unsigned int *fan_speed, unsigned char *fan_dir,char key, unsigned char *new_setting) {
+void HandleFanSettings(unsigned int *fan_speed, unsigned char *fan_dir,unsigned char *fan_swing,char key, unsigned char *new_setting) {
     switch (key) {
+        case 2:
+            *fan_swing = (*fan_swing) ? 0 : 1;
+            UART_SendString("Fan Swing Toggled\n");
+            _delay_ms(150);
+            *new_setting = 1;
+            break;
+            
         case 4: // Decrease Fan Speed
-            if (*fan_speed - 100 > 0) {
-                *fan_speed -= 100;
+            if (*fan_speed - 10 > 0) {
+                *fan_speed -= 10;
                 DC_SetSpeed(0, *fan_speed); // Set the new fan speed
                 UART_SendString("Fan Speed Decreased\n");
                 *new_setting = 1;
@@ -61,8 +70,8 @@ void HandleFanSettings(unsigned int *fan_speed, unsigned char *fan_dir,char key,
             break;
 
         case 5: // Increase Fan Speed
-            if (*fan_speed + 100 < 1100) {
-                *fan_speed += 100;
+            if (*fan_speed + 10 < 255) {
+                *fan_speed += 10;
                 DC_SetSpeed(0, *fan_speed); // Set the new fan speed
                 UART_SendString("Fan Speed Increased\n");
                 *new_setting = 1;
@@ -97,4 +106,6 @@ void SaveSettings(void)
   EEP_Write_Block(&AC_TEMP, (void *)TEMP_ADDRESS, sizeof(AC_TEMP));
 
   EEP_Write_Block(&LDR_THRESHOLD, (void *)LDR_ADDRESS, sizeof(LDR_THRESHOLD));
+
+  EEP_Write_Block(&FAN_SWING, (void *)LDR_ADDRESS, sizeof(FAN_SWING));
 }

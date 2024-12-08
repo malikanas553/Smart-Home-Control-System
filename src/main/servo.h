@@ -14,5 +14,5 @@
 // Function prototypes
 void servo_init(void);
 void servo_set_angle(uint8_t angle);
-
+void servo_swing(void);
 #endif // SERVO_H

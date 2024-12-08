@@ -14,10 +14,11 @@ unsigned char FAN_DIR = CW;
 unsigned char AC_TEMP = 20;
 unsigned char new_setting = 0;
 unsigned int LDR_THRESHOLD = 100;
+unsigned char FAN_SWING = 0;
 // Function prototypes
 void RestoreSettings(void);
 void SaveSettings(void);
-void HandleFanSettings(unsigned int *fan_speed, unsigned char *fan_dir, char key, unsigned char *new_setting);
+void HandleFanSettings(unsigned int *fan_speed, unsigned char *fan_dir,unsigned char *fan_swing,char key, unsigned char *new_setting);
 void HandleACTemperature(unsigned char *ac_temp, char key, unsigned char *new_setting);
 
 #endif

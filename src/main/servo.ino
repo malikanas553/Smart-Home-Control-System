@@ -25,14 +25,15 @@ void servo_set_angle(uint8_t angle)
 
 void servo_swing(void)
 {
-    for (uint8_t i = 0; i <= 180; i++)
+  uint8_t i;
+    for (i = 0; i <= 180; i += 1)  // Increment by 1°
     {
-        servo_set_angle(i);
-        _delay_ms(10);
+        servo_set_angle(i); // Set servo angle
+        _delay_ms(15);      // Allow time for the servo to move
     }
-    for (uint8_t i = 180; i > 0; i--)
+    for (i = 180; i > 0; i -= 1)   // Decrement by 1°
     {
-        servo_set_angle(i);
-        _delay_ms(10);
+        servo_set_angle(i); // Set servo angle
+        _delay_ms(15);      // Allow time for the servo to move
     }
 }
