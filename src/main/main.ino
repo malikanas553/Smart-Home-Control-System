@@ -11,6 +11,7 @@
 #include "sensors.h"
 #include "Led.h"
 #include "Settings.h"
+#include "servo.h"
 #include <stdlib.h>
 
 #define LDR_MIN 10	// Minimum LDR threshold
@@ -31,6 +32,7 @@ void init()
 	UART_Init(9600);
 	Adc_Init();
 	DC_Init();
+	servo_init();
 	LCD_Custom_Char(CW, CW_Arrow);
 	LCD_Custom_Char(CCW, CCW_Arrow);
 	LCD_Custom_Char(BACK, Back_Arrow);
@@ -44,7 +46,6 @@ int main(void)
 
 	while (1)
 	{
-
 		// System Initialization
 		LCD_Clear();
 		MAIN_Menu();
@@ -119,6 +120,7 @@ int main(void)
 
 			switch (channel)
 			{
+        
 			case TMP_PIN:
 				if (key == 1)
 				{
@@ -135,7 +137,8 @@ int main(void)
 						LCD_MoveCursor_xy(0, 14);
 						LCD_Send(FAN_DIR, MODE_DATA);
 
-						HandleFanSettings(&FAN_SPEED, &FAN_DIR, key, &new_setting);
+						HandleFanSettings(&FAN_SPEED, &FAN_DIR, &FAN_SWING, key, &new_setting);
+						
 						DC_SetSpeed(0, FAN_SPEED);
 						DC_SetDirection(0, FAN_DIR);
 						LCD_String_xy(0, 6, speed);
