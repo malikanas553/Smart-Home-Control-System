@@ -14,4 +14,6 @@ Voltage Regulator,LM317T, https://www.ti.com/lit/ds/symlink/lm317-n.pdf?ts=17315
 FTDI Adaptor, communication with Atmega328P, https://ftdichip.com/wp-content/uploads/2020/07/AN_107_AdvancedDriverOptions_AN_000073.pdf, Future Electronics,1,140,140
 Keypad 4x4,Number Keypad,https://shorturl.at/D55c0,Micro Ohm,1,30,30
 24C16 DIP8 16Kbit EEPROM, External EEPROM,https://shorturl.at/5YzwS,UGE Electronics,1,7,7
-,,,,,Total Budget,861
+DC Motor,Standard 130 Type,https://www.farnell.com/datasheets/1863913.pdf,Future Electronics,1,40,40
+L298 Module ,Dual H-Bridge motor driver,https://shorturl.at/YxKTa,RAM Electronics,1,85,85
+,,,,,Total Budget,986
